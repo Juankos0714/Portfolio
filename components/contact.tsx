@@ -1,3 +1,5 @@
+// Nota: "use client" requerido por framer-motion motion.* en Next.js App Router
+// Si se migra a CSS animations puras, este componente puede ser Server Component
 "use client"
 
 import { motion } from "framer-motion"

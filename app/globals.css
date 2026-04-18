@@ -123,3 +123,18 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Fix ML-1: extraído de <style jsx global> incorrecto en projects-interactive.tsx */
+.portfolio-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.portfolio-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.portfolio-scrollbar::-webkit-scrollbar-thumb {
+  background: color-mix(in oklch, var(--accent) 15%, transparent);
+  border-radius: 2px;
+}
+.portfolio-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklch, var(--accent) 30%, transparent);
+}
