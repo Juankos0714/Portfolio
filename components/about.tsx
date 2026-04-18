@@ -3,30 +3,30 @@
 import { motion } from "framer-motion"
 
 const skills = {
-  frontend: ["React", "Next.js", "TypeScript", "Vue.js", "Tailwind CSS", "Framer Motion"],
-  backend: ["Node.js", "Python", "PostgreSQL", "MongoDB", "GraphQL", "REST APIs"],
-  tools: ["Git", "Docker", "AWS", "Vercel", "Figma", "CI/CD"],
+  frontend: ["Angular", "React", "TypeScript", "Tailwind CSS", "RxJS", "Framer Motion"],
+  backend: ["Java", "Spring Boot WebFlux", "Node.js", "Python", "C#", "PostgreSQL"],
+  tools: ["Docker", "Git", "GitHub Actions", "Azure", "Vercel", "Postman"],
 }
 
 const experience = [
   {
-    period: "2022 — Presente",
-    role: "Senior Fullstack Developer",
-    company: "Empresa Tech",
-    description: "Liderando el desarrollo de productos digitales de alto impacto.",
+    period: "2024 — Presente",
+    role: "Desarrollador Fullstack",
+    company: "Proyecto Ubik (Portfolio)",
+    description: "Arquitectura de microservicios reactivos, integración de pagos con Stripe, despliegue en Azure y stack completo Angular + Spring Boot WebFlux."
   },
   {
-    period: "2020 — 2022",
-    role: "Fullstack Developer",
-    company: "Startup Digital",
-    description: "Desarrollo de MVPs y escalado de aplicaciones.",
+    period: "2024",
+    role: "Desarrollador de Software",
+    company: "Cliente Palo de Café",
+    description: "Sistema POS e inventario con C# .NET 6 y SQLite. Entrega completa a cliente real con módulos de ventas, productos y reportes."
   },
   {
-    period: "2018 — 2020",
-    role: "Frontend Developer",
-    company: "Agencia Creativa",
-    description: "Creación de interfaces de usuario y experiencias interactivas.",
-  },
+    period: "2024 — 2026",
+    role: "Tecnólogo en ADSI",
+    company: "SENA",
+    description: "Formación en Análisis y Desarrollo de Software. Proyectos prácticos con Java, Angular, Spring Boot y DevOps."
+  }
 ]
 
 export function About() {
@@ -53,17 +53,13 @@ export function About() {
 
             <div className="space-y-6 text-muted-foreground leading-relaxed">
               <p>
-                Soy un desarrollador con más de 6 años de experiencia creando soluciones 
-                digitales que equilibran la elegancia técnica con la usabilidad práctica.
+                Soy un desarrollador fullstack enfocado en <span className="text-foreground">backend reactivo</span> con Java/Spring Boot WebFlux y <span className="text-foreground">frontend moderno</span> con Angular.
               </p>
               <p>
-                Mi enfoque se centra en escribir código limpio, mantenible y escalable, 
-                mientras colaboro estrechamente con diseñadores y stakeholders para 
-                entregar productos que realmente importan.
+                Me especializo en arquitecturas de microservicios, integración de pagos y despliegue en nube. Siempre buscando optimizar el rendimiento y la experiencia de usuario.
               </p>
               <p>
-                Creo firmemente que la mejor tecnología es la que <span className="text-foreground">desaparece</span>, 
-                permitiendo que las personas se concentren en lo que realmente necesitan lograr.
+                Creo firmemente que <span className="text-foreground italic">"el mejor código es el que resuelve problemas reales con elegancia técnica"</span>.
               </p>
             </div>
           </motion.div>
@@ -92,7 +88,7 @@ export function About() {
                     {items.map((skill) => (
                       <span 
                         key={skill}
-                        className="text-sm px-3 py-1.5 border border-border hover:border-accent hover:text-accent transition-colors duration-300 cursor-default"
+                        className="text-xs md:text-sm px-3 py-1.5 border border-border hover:border-accent hover:text-accent transition-colors duration-300 cursor-default"
                       >
                         {skill}
                       </span>
@@ -125,18 +121,18 @@ export function About() {
                   className="grid grid-cols-12 gap-4 group"
                 >
                   <div className="col-span-4 md:col-span-3">
-                    <span className="text-xs text-muted-foreground font-mono">
+                    <span className="text-[10px] md:text-xs text-muted-foreground font-mono">
                       {item.period}
                     </span>
                   </div>
                   <div className="col-span-8 md:col-span-9">
-                    <h4 className="text-base font-medium group-hover:text-accent transition-colors duration-300">
+                    <h4 className="text-sm md:text-base font-medium group-hover:text-accent transition-colors duration-300">
                       {item.role}
                     </h4>
-                    <span className="text-sm text-muted-foreground block mb-2">
+                    <span className="text-xs md:text-sm text-muted-foreground block mb-2">
                       {item.company}
                     </span>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs md:text-sm text-muted-foreground">
                       {item.description}
                     </p>
                   </div>

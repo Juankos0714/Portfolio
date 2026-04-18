@@ -17,8 +17,8 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: 'Portfolio — Desarrollador Fullstack',
-  description: 'Desarrollador Fullstack especializado en crear experiencias digitales únicas y funcionales',
+  title: 'Juan Camilo Rojas — Desarrollador Fullstack',
+  description: 'Desarrollador Fullstack especializado en Spring Boot WebFlux, Angular y arquitectura de microservicios. Disponible para proyectos remotos.',
   generator: 'v0.app',
   icons: {
     icon: [

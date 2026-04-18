@@ -6,35 +6,38 @@ import { useState } from "react"
 const projects = [
   {
     number: "01",
-    title: "E-Commerce Platform",
-    category: "Fullstack Development",
-    year: "2024",
-    description: "Plataforma de comercio electrónico con arquitectura headless, optimizada para alto rendimiento y escalabilidad.",
-    technologies: ["Next.js", "TypeScript", "PostgreSQL", "Stripe"],
+    title: "Ubik",
+    category: "Fullstack · Microservicios",
+    year: "2024–2025",
+    description: "Plataforma de reservas para moteles con arquitectura de 7 microservicios reactivos, gateway JWT, pagos con Stripe, notificaciones por email y stack de observabilidad Prometheus/Grafana.",
+    technologies: ["Spring Boot WebFlux", "Angular", "PostgreSQL", "Docker", "Stripe", "Azure"],
+    link: "https://github.com/Juankos0714/Ubik-App"
   },
   {
     number: "02",
-    title: "Dashboard Analytics",
-    category: "Frontend & API",
-    year: "2024",
-    description: "Sistema de visualización de datos en tiempo real con gráficos interactivos y reportes automatizados.",
-    technologies: ["React", "D3.js", "Node.js", "Redis"],
+    title: "Ubik Microservices",
+    category: "Backend · DevOps",
+    year: "2025",
+    description: "Backend reactivo con Spring WebFlux, R2DBC, RabbitMQ, Kafka y Eureka. Despliegue en Azure VM con Docker Compose, SSL/Nginx y systemd. Patrones hexagonal, CQRS y Saga.",
+    technologies: ["Java", "Spring WebFlux", "RabbitMQ", "Kafka", "Docker", "Prometheus"],
+    link: "https://github.com/Juankos0714/Ubik-Microservices"
   },
   {
     number: "03",
-    title: "Mobile Banking App",
-    category: "Fullstack Development",
-    year: "2023",
-    description: "Aplicación bancaria con autenticación biométrica, transferencias instantáneas y gestión financiera personal.",
-    technologies: ["React Native", "Express", "MongoDB", "AWS"],
+    title: "Palo de Café POS",
+    category: "Desktop · Fullstack",
+    year: "2024",
+    description: "Sistema de punto de venta e inventario para cliente real, construido con C# .NET 6, Windows Forms y SQLite. Gestión de productos, ventas y reportes.",
+    technologies: ["C#", ".NET 6", "Windows Forms", "SQLite"],
   },
   {
     number: "04",
-    title: "CMS Headless",
-    category: "Backend & Architecture",
-    year: "2023",
-    description: "Sistema de gestión de contenidos modular con API GraphQL y panel de administración personalizable.",
-    technologies: ["GraphQL", "Prisma", "Next.js", "Vercel"],
+    title: "JWT API",
+    category: "Backend · Seguridad",
+    year: "2025",
+    description: "Servicio de autenticación y autorización en Java con Spring Boot, Spring Security y tokens JWT. Roles, endpoints protegidos y manejo de sesiones.",
+    technologies: ["Java", "Spring Boot", "Spring Security", "JWT", "Maven"],
+    link: "https://github.com/Juankos0714/JWT-api"
   },
 ]
 
@@ -65,7 +68,7 @@ export function Projects() {
             transition={{ duration: 0.8, delay: index * 0.1 }}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
-            className="group border-t border-border py-12 cursor-pointer"
+            className="group border-t border-border py-12 cursor-pointer relative"
           >
             <div className="grid grid-cols-12 gap-4 items-start">
               {/* Number */}
@@ -76,7 +79,7 @@ export function Projects() {
               </div>
 
               {/* Title & Category */}
-              <div className="col-span-10 md:col-span-5">
+              <div className="col-span-8 md:col-span-5 relative">
                 <h3 className="font-serif text-2xl md:text-4xl font-light tracking-tight mb-2 group-hover:text-accent transition-colors duration-500">
                   {project.title}
                 </h3>
@@ -100,11 +103,29 @@ export function Projects() {
                 </p>
               </motion.div>
 
-              {/* Year */}
-              <div className="hidden md:block col-span-2 text-right">
-                <span className="text-sm text-muted-foreground">
+              {/* Year & External Link */}
+              <div className="col-span-2 md:col-span-2 text-right flex flex-col items-end gap-2">
+                <span className="text-xs md:text-sm text-muted-foreground">
                   {project.year}
                 </span>
+                {project.link && (
+                  <motion.a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ 
+                      opacity: hoveredIndex === index ? 1 : 0,
+                      scale: hoveredIndex === index ? 1 : 0.8
+                    }}
+                    className="p-2 border border-accent/20 bg-accent/5 hover:bg-accent hover:text-accent-foreground transition-all duration-300"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                  </motion.a>
+                )}
               </div>
             </div>
 
@@ -123,7 +144,7 @@ export function Projects() {
                 {project.technologies.map((tech) => (
                   <span 
                     key={tech}
-                    className="text-xs tracking-wide px-3 py-1.5 border border-border bg-secondary/50"
+                    className="text-[10px] md:text-xs tracking-wide px-3 py-1.5 border border-border bg-secondary/50"
                   >
                     {tech}
                   </span>

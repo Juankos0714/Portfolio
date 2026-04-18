@@ -29,7 +29,7 @@ export function Contact() {
           </p>
 
           <motion.a
-            href="mailto:hola@tudominio.com"
+            href="mailto:juankos0714@gmail.com"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -37,7 +37,7 @@ export function Contact() {
             className="inline-flex items-center gap-4 group"
           >
             <span className="text-2xl md:text-3xl font-light hover:text-accent transition-colors duration-300">
-              hola@tudominio.com
+              juankos0714@gmail.com
             </span>
             <motion.span 
               className="w-12 h-12 border border-current flex items-center justify-center group-hover:bg-accent group-hover:border-accent group-hover:text-accent-foreground transition-all duration-300"
@@ -71,7 +71,9 @@ export function Contact() {
                 Ubicación
               </span>
               <p className="text-sm">
-                Ciudad, País
+                Armenia, Quindío
+                <br />
+                Colombia 🇨🇴
                 <br />
                 <span className="text-muted-foreground">Disponible remoto</span>
               </p>
@@ -83,22 +85,20 @@ export function Contact() {
               </span>
               <div className="space-y-2">
                 <a 
-                  href="#" 
+                  href="https://github.com/Juankos0714" 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="block text-sm hover:text-accent transition-colors duration-300"
                 >
                   GitHub
                 </a>
                 <a 
-                  href="#" 
+                  href="https://www.linkedin.com/in/juan-camilo-rojas-ospina-453793175/" 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="block text-sm hover:text-accent transition-colors duration-300"
                 >
                   LinkedIn
-                </a>
-                <a 
-                  href="#" 
-                  className="block text-sm hover:text-accent transition-colors duration-300"
-                >
-                  Twitter / X
                 </a>
               </div>
             </div>
