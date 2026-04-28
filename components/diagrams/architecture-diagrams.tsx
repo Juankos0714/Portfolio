@@ -1,161 +1,376 @@
-// Diagramas SVG individuales — Server Components puros (sin hooks, sin eventos)
-// Fix ML-5: useId() para IDs de filtros SVG únicos, evita colisiones en DOM StrictMode
 "use client"
-import { useId } from "react"
 
-export const UbikArchitecture = () => {
-  const filterId = useId()
+// Named color palette for diagrams. CSS variables are used where the token
+// already exists in the design system; hex values fill the gaps.
+const COLORS = {
+  blue: "var(--tech-blue)",
+  accent: "var(--accent)",
+  purple: "#7c6af7",
+  amber: "#f59e0b",
+  violet: "#8b5cf6",
+  emerald: "#10b981",
+  sky: "#60a5fa",
+} as const
+
+type DiagramColor = (typeof COLORS)[keyof typeof COLORS]
+
+interface NodeProps {
+  color: DiagramColor
+  label: string
+  sublabel?: string
+  icon: string
+}
+
+function DiagramNode({ color, label, sublabel, icon }: NodeProps) {
   return (
-    <div className="w-full h-full flex items-center justify-center p-4">
-      <svg viewBox="0 0 800 500" className="w-full h-auto max-h-[400px]">
-        <defs>
-          <filter id={filterId}>
-            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-            <feMerge>
-              <feMergeNode in="coloredBlur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-
-        {/* Hub Central — Message Broker */}
-        <rect x="350" y="210" width="100" height="80" rx="4" className="fill-accent/20 stroke-accent" strokeWidth="2" />
-        <text x="400" y="255" textAnchor="middle" className="fill-foreground text-[12px] font-bold">RabbitMQ</text>
-
-        {/* Gateway */}
-        <rect x="50" y="210" width="100" height="80" rx="4" className="fill-blue-500/10 stroke-blue-500" strokeWidth="2" />
-        <text x="100" y="255" textAnchor="middle" className="fill-foreground text-[12px] font-bold">JWT Gateway</text>
-
-        {/* Servicios */}
-        <g>
-          <rect x="350" y="50" width="100" height="60" rx="10" className="fill-secondary/50 stroke-border" strokeWidth="1" />
-          <text x="400" y="85" textAnchor="middle" className="fill-foreground text-[10px]">User Service</text>
-
-          <rect x="550" y="100" width="100" height="60" rx="10" className="fill-secondary/50 stroke-border" strokeWidth="1" />
-          <text x="600" y="135" textAnchor="middle" className="fill-foreground text-[10px]">Booking Service</text>
-
-          <rect x="650" y="220" width="100" height="60" rx="10" className="fill-secondary/50 stroke-border" strokeWidth="1" />
-          <text x="700" y="255" textAnchor="middle" className="fill-foreground text-[10px]">Payment Service</text>
-
-          <rect x="550" y="340" width="100" height="60" rx="10" className="fill-secondary/50 stroke-border" strokeWidth="1" />
-          <text x="600" y="375" textAnchor="middle" className="fill-foreground text-[10px]">Alert Service</text>
-
-          <rect x="350" y="390" width="100" height="60" rx="10" className="fill-secondary/50 stroke-border" strokeWidth="1" />
-          <text x="400" y="425" textAnchor="middle" className="fill-foreground text-[10px]">Owner Service</text>
-        </g>
-
-        {/* Base de datos */}
-        <path d="M720 380 q 0 -10 30 -10 t 30 10 v 40 q 0 10 -30 10 t -30 -10 v -40" className="fill-purple-500/10 stroke-purple-500" strokeWidth="2" />
-        <text x="750" y="440" textAnchor="middle" className="fill-foreground text-[10px]">PostgreSQL</text>
-
-        {/* Conexiones */}
-        <path d="M150 250 H 350" className="stroke-accent/40" strokeDasharray="4 4" fill="none" />
-        <path d="M400 110 V 210" className="stroke-accent/40" strokeDasharray="4 4" fill="none" />
-        <path d="M450 240 L 550 145" className="stroke-accent/40" strokeDasharray="4 4" fill="none" />
-        <path d="M450 250 H 650" className="stroke-accent/40" strokeDasharray="4 4" fill="none" />
-        <path d="M450 260 L 550 355" className="stroke-accent/40" strokeDasharray="4 4" fill="none" />
-        <path d="M400 290 V 390" className="stroke-accent/40" strokeDasharray="4 4" fill="none" />
-      </svg>
+    <div className="flex flex-col items-center gap-1.5" style={{ minWidth: 90 }}>
+      <div
+        className="w-12 h-12 flex items-center justify-center text-xl"
+        style={{ border: `2px solid ${color}`, background: `${color}18` }}
+      >
+        {icon}
+      </div>
+      <span className="text-[11px] font-medium text-center leading-tight">{label}</span>
+      {sublabel && (
+        <span className="text-[9px] text-center leading-tight opacity-55 max-w-[90px]">{sublabel}</span>
+      )}
     </div>
   )
 }
 
-export const DevOpsAzureArchitecture = () => (
-  <div className="w-full h-full flex items-center justify-center p-4">
-    <svg viewBox="0 0 800 500" className="w-full h-auto max-h-[400px]">
-      {/* Acceso externo */}
-      <circle cx="100" cy="250" r="40" className="fill-sky-500/10 stroke-sky-500" strokeWidth="2" />
-      <text x="100" y="255" textAnchor="middle" className="fill-foreground text-[12px] font-bold">Internet</text>
+function Arrow({ label, vertical = false }: { label?: string; vertical?: boolean }) {
+  return (
+    <div
+      className={`flex ${vertical ? "flex-col" : "flex-row"} items-center gap-1 flex-shrink-0 ${vertical ? "py-1" : "px-1"}`}
+    >
+      {label && (
+        <span className="text-[9px] opacity-50 font-mono whitespace-nowrap">{label}</span>
+      )}
+      <div
+        className="relative flex-shrink-0"
+        style={{
+          background: "var(--border)",
+          width: vertical ? 1 : 32,
+          height: vertical ? 24 : 1,
+        }}
+      >
+        {vertical ? (
+          <div
+            className="absolute left-1/2 bottom-0"
+            style={{
+              transform: "translateX(-50%) translateY(3px)",
+              borderLeft: "4px solid transparent",
+              borderRight: "4px solid transparent",
+              borderTop: "6px solid var(--muted-foreground)",
+            }}
+          />
+        ) : (
+          <div
+            className="absolute right-0 top-1/2"
+            style={{
+              transform: "translateY(-50%) translateX(3px)",
+              borderTop: "4px solid transparent",
+              borderBottom: "4px solid transparent",
+              borderLeft: "6px solid var(--muted-foreground)",
+            }}
+          />
+        )}
+      </div>
+    </div>
+  )
+}
 
-      {/* Nginx */}
-      <rect x="250" y="200" width="100" height="100" rx="8" className="fill-emerald-500/10 stroke-emerald-500" strokeWidth="2" />
-      <text x="300" y="255" textAnchor="middle" className="fill-foreground text-[12px] font-bold">Nginx (SSL)</text>
+function DiagramBadge({ label, color }: { label: string; color: DiagramColor }) {
+  return (
+    <span
+      className="text-[9px] px-1.5 py-0.5 font-mono tracking-[0.04em]"
+      style={{ border: `1px solid ${color}`, color }}
+    >
+      {label}
+    </span>
+  )
+}
 
-      {/* Límite Azure VM */}
-      <rect x="450" y="50" width="300" height="400" rx="16" className="fill-none stroke-blue-400/30" strokeDasharray="8 8" />
-      <text x="600" y="30" textAnchor="middle" className="fill-blue-400 text-[12px] font-bold">Azure VM (Ubuntu)</text>
+interface SectionProps {
+  title: string
+  color: DiagramColor
+  note?: string
+  children: React.ReactNode
+}
 
-      {/* Docker Compose */}
-      <rect x="500" y="100" width="200" height="200" rx="8" className="fill-blue-500/10 stroke-blue-500" strokeWidth="2" />
-      <text x="600" y="130" textAnchor="middle" className="fill-foreground text-[12px] font-bold">Docker Compose</text>
+function DiagramSection({ title, color, note, children }: SectionProps) {
+  return (
+    <div className="relative p-3 w-full" style={{ border: `1px dashed ${color}40` }}>
+      <span
+        className="absolute -top-2 left-3 px-1.5 text-[9px] font-mono tracking-[0.08em] uppercase bg-card"
+        style={{ color }}
+      >
+        {title}
+      </span>
+      {children}
+      {note && (
+        <p className="mt-2.5 text-[10px] opacity-50 leading-relaxed">{note}</p>
+      )}
+    </div>
+  )
+}
 
-      {/* Contenedores */}
-      <rect x="520" y="150" width="70" height="30" rx="2" className="fill-blue-500/20 stroke-blue-500/50" />
-      <text x="555" y="170" textAnchor="middle" className="fill-foreground text-[8px]">App API</text>
+// ─── DIAGRAM 1: Ubik Microservices ────────────────────────────────────────────
+export function UbikArchitecture() {
+  return (
+    <div className="flex flex-col items-center gap-0 w-full text-foreground">
+      <DiagramSection title="Capa de presentación" color={COLORS.blue}>
+        <div className="flex justify-center gap-6">
+          <DiagramNode color={COLORS.blue} label="Navegador Web" sublabel="Angular SPA" icon="🖥" />
+          <DiagramNode color={COLORS.blue} label="App Móvil" sublabel="Futuro cliente" icon="📱" />
+        </div>
+      </DiagramSection>
+      <Arrow vertical label="HTTPS" />
+      <DiagramSection
+        title="Seguridad — API Gateway"
+        color={COLORS.accent}
+        note="Todas las peticiones pasan por aquí. Verifica tokens y decide a qué servicio enviar la solicitud."
+      >
+        <div className="flex justify-center items-center gap-3">
+          <DiagramNode color={COLORS.accent} label="JWT Gateway" sublabel="Autenticación" icon="🔐" />
+          <DiagramBadge label="Spring Security" color={COLORS.accent} />
+        </div>
+      </DiagramSection>
+      <Arrow vertical label="enruta" />
+      <DiagramSection
+        title="7 Microservicios independientes"
+        color={COLORS.purple}
+        note="Cada servicio hace una sola cosa. Si uno falla, los demás siguen funcionando."
+      >
+        <div className="flex flex-wrap justify-center gap-3">
+          {[
+            { l: "Usuarios", s: "Registro / Login" },
+            { l: "Reservas", s: "Disponibilidad" },
+            { l: "Pagos", s: "Stripe" },
+            { l: "Notif.", s: "Email / Push" },
+            { l: "Propietario", s: "Panel admin" },
+            { l: "Habitaciones", s: "Inventario" },
+            { l: "Reportes", s: "Analytics" },
+          ].map(({ l, s }) => (
+            <DiagramNode key={l} color={COLORS.purple} label={l} sublabel={s} icon="⚙️" />
+          ))}
+        </div>
+      </DiagramSection>
+      <Arrow vertical label="eventos async" />
+      <DiagramSection
+        title="Bus de mensajes"
+        color={COLORS.amber}
+        note="Los servicios se comunican sin depender directamente unos de otros."
+      >
+        <div className="flex justify-center gap-5">
+          <DiagramNode color={COLORS.amber} label="RabbitMQ" sublabel="Cola de eventos" icon="🐰" />
+          <DiagramNode color={COLORS.amber} label="Kafka" sublabel="Streams" icon="📨" />
+        </div>
+      </DiagramSection>
+      <Arrow vertical label="persiste" />
+      <div className="flex gap-4 w-full">
+        <div className="flex-1">
+          <DiagramSection title="Datos" color={COLORS.violet}>
+            <DiagramNode color={COLORS.violet} label="PostgreSQL" sublabel="Base de datos" icon="🗄" />
+          </DiagramSection>
+        </div>
+        <div className="flex-1">
+          <DiagramSection title="Monitoreo" color={COLORS.emerald}>
+            <div className="flex gap-3 justify-center">
+              <DiagramNode color={COLORS.emerald} label="Prometheus" sublabel="Métricas" icon="📊" />
+              <DiagramNode color={COLORS.emerald} label="Grafana" sublabel="Dashboard" icon="📈" />
+            </div>
+          </DiagramSection>
+        </div>
+      </div>
+    </div>
+  )
+}
 
-      <rect x="610" y="150" width="70" height="30" rx="2" className="fill-blue-500/20 stroke-blue-500/50" />
-      <text x="645" y="170" textAnchor="middle" className="fill-foreground text-[8px]">Auth API</text>
+// ─── DIAGRAM 2: DevOps / Azure ────────────────────────────────────────────────
+export function DevOpsAzureArchitecture() {
+  return (
+    <div className="flex flex-col items-center gap-0 w-full text-foreground">
+      <DiagramSection title="Internet" color={COLORS.blue}>
+        <div className="flex justify-center">
+          <DiagramNode color={COLORS.blue} label="Usuario" sublabel="Cualquier navegador" icon="🌐" />
+        </div>
+      </DiagramSection>
+      <Arrow vertical label="dominio + SSL" />
+      <DiagramSection
+        title="Reverse Proxy"
+        color={COLORS.accent}
+        note="Nginx recibe todas las peticiones, aplica el certificado SSL y las reenvía a los contenedores internos."
+      >
+        <div className="flex justify-center items-center gap-3">
+          <DiagramNode color={COLORS.accent} label="Nginx" sublabel="SSL · Balanceo" icon="🔒" />
+          <DiagramBadge label="Let's Encrypt" color={COLORS.accent} />
+        </div>
+      </DiagramSection>
+      <Arrow vertical label="tráfico interno" />
+      <DiagramSection
+        title="Azure VM — Ubuntu Server"
+        color={COLORS.blue}
+        note="Servidor virtual en la nube. Todo corre dentro de este servidor."
+      >
+        <DiagramSection
+          title="Docker Compose — contenedores aislados"
+          color={COLORS.sky}
+          note="Cada aplicación corre en su propio contenedor. Fácil de reiniciar, actualizar o escalar."
+        >
+          <div className="flex flex-wrap gap-3 justify-center">
+            {[
+              { l: "API Backend", s: "Spring Boot", c: COLORS.sky },
+              { l: "Frontend", s: "Angular", c: COLORS.sky },
+              { l: "RabbitMQ", s: "Mensajería", c: COLORS.amber },
+              { l: "PostgreSQL", s: "Base de datos", c: COLORS.violet },
+            ].map(({ l, s, c }) => (
+              <DiagramNode key={l} color={c} label={l} sublabel={s} icon="📦" />
+            ))}
+          </div>
+        </DiagramSection>
+      </DiagramSection>
+      <Arrow vertical label="métricas" />
+      <DiagramSection title="Observabilidad" color={COLORS.emerald}>
+        <div className="flex gap-3 justify-center">
+          <DiagramNode color={COLORS.emerald} label="Prometheus" sublabel="Recolecta métricas" icon="📊" />
+          <DiagramNode color={COLORS.emerald} label="Grafana" sublabel="Visualiza en tiempo real" icon="📈" />
+        </div>
+      </DiagramSection>
+    </div>
+  )
+}
 
-      <rect x="565" y="200" width="70" height="30" rx="2" className="fill-purple-500/20 stroke-purple-500/50" />
-      <text x="600" y="220" textAnchor="middle" className="fill-foreground text-[8px]">PostgreSQL</text>
+// ─── DIAGRAM 3: POS Desktop ───────────────────────────────────────────────────
+export function POSPaloCafeArchitecture() {
+  return (
+    <div className="flex flex-col items-center gap-0 w-full text-foreground">
+      <DiagramSection
+        title="Capa de presentación — Lo que ve el usuario"
+        color={COLORS.accent}
+        note="Interfaz de escritorio con formularios, tablas y botones. El cajero interactúa directamente con esta pantalla."
+      >
+        <div className="flex flex-wrap gap-3 justify-center">
+          {["Módulo de Ventas", "Panel de Inventario", "Reportes y Cierre", "Gestión de Productos"].map((l) => (
+            <DiagramNode key={l} color={COLORS.accent} label={l} sublabel="Windows Forms" icon="🖥" />
+          ))}
+        </div>
+      </DiagramSection>
+      <Arrow vertical label="eventos UI" />
+      <DiagramSection
+        title="Lógica de negocio — C# .NET 6"
+        color={COLORS.blue}
+        note="El cerebro del sistema. Calcula precios, aplica descuentos, valida stock y genera reportes. Esta capa solo conoce reglas, no pantallas ni base de datos."
+      >
+        <div className="flex flex-wrap gap-3 justify-center">
+          {["Motor de Ventas", "Control de Stock", "Generador de Reportes", "Validaciones"].map((l) => (
+            <DiagramNode key={l} color={COLORS.blue} label={l} sublabel="Entity Framework" icon="⚙️" />
+          ))}
+        </div>
+      </DiagramSection>
+      <Arrow vertical label="lectura / escritura" />
+      <DiagramSection
+        title="Datos — SQLite (archivo local)"
+        color={COLORS.violet}
+        note="La base de datos es un archivo en el mismo computador. Funciona sin internet, arranca en milisegundos y no necesita un servidor externo."
+      >
+        <div className="flex gap-4 justify-center">
+          {[
+            { l: "Productos", s: "Catálogo", i: "🏷" },
+            { l: "Ventas", s: "Historial", i: "🧾" },
+            { l: "Inventario", s: "Stock", i: "📦" },
+            { l: "Clientes", s: "Registro", i: "👥" },
+          ].map(({ l, s, i }) => (
+            <DiagramNode key={l} color={COLORS.violet} label={l} sublabel={s} icon={i} />
+          ))}
+        </div>
+      </DiagramSection>
+    </div>
+  )
+}
 
-      {/* Observabilidad */}
-      <rect x="500" y="330" width="200" height="100" rx="8" className="fill-orange-500/10 stroke-orange-500" strokeWidth="2" />
-      <text x="600" y="355" textAnchor="middle" className="fill-foreground text-[12px] font-bold">Prometheus / Grafana</text>
+// ─── DIAGRAM 4: JWT Auth Flow ─────────────────────────────────────────────────
+interface JWTStep {
+  n: string
+  color: DiagramColor
+  icon: string
+  label: string
+  sub: string
+}
 
-      {/* Conexiones */}
-      <path d="M140 250 H 250" className="stroke-sky-500" strokeWidth="2" />
-      <path d="M350 250 H 500" className="stroke-emerald-500" strokeWidth="2" />
-      <path d="M600 300 V 330" className="stroke-orange-500/40" strokeDasharray="4 4" />
-    </svg>
-  </div>
-)
+const JWT_STEPS: JWTStep[] = [
+  { n: "1", color: COLORS.blue, icon: "👤", label: "Usuario", sub: "Envía usuario + contraseña" },
+  { n: "2", color: COLORS.accent, icon: "🔑", label: "Spring Security", sub: "Verifica credenciales en BD" },
+  { n: "3", color: COLORS.amber, icon: "🎫", label: "Token JWT", sub: "Genera un pase digital firmado" },
+  { n: "4", color: COLORS.purple, icon: "🛡", label: "JwtFilter", sub: "Valida el pase en cada petición" },
+  { n: "5", color: COLORS.emerald, icon: "✅", label: "Recurso Protegido", sub: "Acceso concedido según rol" },
+]
 
-export const POSPaloCafeArchitecture = () => (
-  <div className="w-full h-full flex items-center justify-center p-4">
-    <svg viewBox="0 0 800 500" className="w-full h-auto max-h-[400px]">
-      <g transform="translate(400, 250)">
-        {/* Capa de datos */}
-        <ellipse cx="0" cy="150" rx="200" ry="40" className="fill-slate-500/10 stroke-slate-500" strokeWidth="2" />
-        <text x="0" y="155" textAnchor="middle" className="fill-foreground text-[14px] font-bold">SQLite Database</text>
+const JWT_ROLES = [
+  { l: "Admin", desc: "Acceso total", c: COLORS.amber },
+  { l: "Usuario", desc: "Acceso limitado", c: COLORS.purple },
+  { l: "Invitado", desc: "Solo lectura", c: COLORS.emerald },
+] as const
 
-        {/* Capa de lógica */}
-        <rect x="-180" y="30" width="360" height="60" rx="8" className="fill-blue-500/10 stroke-blue-500" strokeWidth="2" />
-        <text x="0" y="65" textAnchor="middle" className="fill-foreground text-[14px] font-bold">Business Logic (C# .NET)</text>
+export function JWTFlowArchitecture() {
+  return (
+    <div className="flex flex-col gap-0 w-full text-foreground">
+      <div className="flex items-center justify-center flex-wrap gap-1">
+        {JWT_STEPS.map((step, i) => (
+          <div key={step.n} className="flex items-center">
+            <div className="flex flex-col items-center gap-1.5" style={{ minWidth: 100 }}>
+              <div
+                className="w-7 h-7 flex items-center justify-center text-[11px] font-bold font-mono"
+                style={{ border: `2px solid ${step.color}`, background: `${step.color}22`, color: step.color }}
+              >
+                {step.n}
+              </div>
+              <div
+                className="w-14 h-14 flex items-center justify-center text-2xl"
+                style={{ border: `2px solid ${step.color}`, background: `${step.color}18` }}
+              >
+                {step.icon}
+              </div>
+              <span className="text-[11px] font-medium text-center">{step.label}</span>
+              <span className="text-[9px] opacity-55 text-center max-w-[100px] leading-tight">{step.sub}</span>
+            </div>
+            {i < JWT_STEPS.length - 1 && (
+              <div className="relative w-5 h-px bg-border flex-shrink-0 mb-10">
+                <div
+                  className="absolute right-0 top-1/2"
+                  style={{
+                    transform: "translateY(-50%) translateX(3px)",
+                    borderTop: "4px solid transparent",
+                    borderBottom: "4px solid transparent",
+                    borderLeft: "6px solid var(--muted-foreground)",
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      <div className="mt-5">
+        <DiagramSection
+          title="El token JWT es como un pase de concierto"
+          color={COLORS.amber}
+          note="Una vez que inicias sesión, recibes un token firmado digitalmente. En cada petición siguiente presentas ese token — el servidor verifica que sea auténtico (sin consultar la BD) y te da acceso según tu rol. Expira en tiempo configurable y puede revocarse."
+        >
+          <div className="flex gap-5 justify-center flex-wrap">
+            {JWT_ROLES.map(({ l, desc, c }) => (
+              <DiagramNode key={l} color={c} label={l} sublabel={desc} icon="👤" />
+            ))}
+          </div>
+        </DiagramSection>
+      </div>
+    </div>
+  )
+}
 
-        {/* Capa de UI */}
-        <rect x="-220" y="-120" width="440" height="100" rx="12" className="fill-accent/10 stroke-accent" strokeWidth="2" />
-        <text x="0" y="-85" textAnchor="middle" className="fill-foreground text-[16px] font-bold">WinForms UI</text>
-        <text x="0" y="-60" textAnchor="middle" className="fill-foreground/60 text-[10px]">Event-Driven Responsive Design</text>
-
-        {/* Conectores */}
-        <path d="M0 -20 V 30" className="stroke-foreground/20" strokeWidth="2" />
-        <path d="M0 90 V 110" className="stroke-foreground/20" strokeWidth="2" />
-      </g>
-    </svg>
-  </div>
-)
-
-export const JWTFlowArchitecture = () => (
-  <div className="w-full h-full flex items-center justify-center p-4">
-    <svg viewBox="0 0 800 400" className="w-full h-auto max-h-[300px]">
-      {/* Pasos del flujo */}
-      <rect x="50" y="150" width="100" height="100" rx="8" className="fill-secondary/50 stroke-border" />
-      <text x="100" y="205" textAnchor="middle" className="fill-foreground text-[12px] font-bold">Client</text>
-
-      <circle cx="250" cy="200" r="40" className="fill-amber-500/10 stroke-amber-500" strokeWidth="2" />
-      <text x="250" y="205" textAnchor="middle" className="fill-foreground text-[10px] font-bold">JwtFilter</text>
-
-      <rect x="400" y="150" width="140" height="100" rx="8" className="fill-blue-500/10 stroke-blue-500" strokeWidth="2" />
-      <text x="470" y="205" textAnchor="middle" className="fill-foreground text-[12px] font-bold">SecurityContext</text>
-
-      <rect x="650" y="150" width="100" height="100" rx="8" className="fill-emerald-500/10 stroke-emerald-500" strokeWidth="2" />
-      <text x="700" y="205" textAnchor="middle" className="fill-foreground text-[12px] font-bold">Resource</text>
-
-      {/* Flechas */}
-      <path d="M150 200 H 210" className="stroke-foreground/20" strokeWidth="2" />
-      <path d="M290 200 H 400" className="stroke-foreground/20" strokeWidth="2" />
-      <path d="M540 200 H 650" className="stroke-foreground/20" strokeWidth="2" />
-
-      {/* Etiquetas */}
-      <text x="180" y="180" textAnchor="middle" className="fill-amber-500 text-[10px] font-mono italic">Bearer Token</text>
-      <text x="345" y="180" textAnchor="middle" className="fill-blue-500 text-[10px] font-mono">Authentication</text>
-    </svg>
-  </div>
-)
-
-export const ArchFallback = () => (
-  <div className="flex items-center justify-center h-full text-sm text-muted-foreground">
-    Diagrama no disponible
-  </div>
-)
+export function ArchFallback() {
+  return (
+    <div className="flex items-center justify-center h-full text-sm text-muted-foreground">
+      Diagrama no disponible
+    </div>
+  )
+}

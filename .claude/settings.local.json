@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(mkdir -p extracted)",
+      "Bash(tar -xf \"webfetch-1777050696311-90skb8.bin\" -C extracted)",
+      "Bash(mkdir -p \"portfolio/uploads\")",
+      "Bash(cp \"C:\\\\Users\\\\jucar\\\\.claude\\\\projects\\\\C--Users-jucar-OneDrive-Documentos-SoftwareDevelopment-Portfolio-firstDraft\\\\220c394c-8013-4739-bc3e-db145ca17364\\\\tool-results\\\\extracted\\\\portfolio\\\\project\\\\uploads\\\\photo_upload-1776883885084.jpg\" \"portfolio/uploads/photo_upload-1776883885084.jpg\")",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(gh pr *)"
+    ]
+  }
+}

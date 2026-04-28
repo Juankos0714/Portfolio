@@ -1,4 +1,3 @@
-// Tipos compartidos del portfolio
 export type ArchitectureType = "microservices" | "devops" | "desktop" | "jwt"
 
 export interface ProjectKPI {
@@ -27,22 +26,11 @@ export const PROJECTS: Project[] = [
     title: "Ubik",
     category: "Fullstack · Microservicios",
     year: "2024–2025",
-    description:
-      "Plataforma de reservas para moteles con arquitectura de 7 microservicios reactivos, gateway JWT, pagos con Stripe y monitoreo.",
-    longDescription:
-      "Ubik es un ecosistema completo diseñado para la gestión de reservas en tiempo real. Utiliza una arquitectura orientada a microservicios para garantizar escalabilidad y desacoplamiento. El sistema maneja desde el inventario de habitaciones hasta el procesamiento de pagos seguro y notificaciones push.",
-    technologies: [
-      "Spring Boot WebFlux",
-      "Angular",
-      "PostgreSQL",
-      "Docker",
-      "Stripe",
-      "RabbitMQ",
-      "Redis",
-      "Azure",
-    ],
+    description: "Plataforma de reservas para moteles con arquitectura de 7 microservicios reactivos, gateway JWT, pagos con Stripe y monitoreo.",
+    longDescription: "Ubik es un ecosistema completo para la gestión de reservas en tiempo real. Utiliza microservicios independientes para garantizar escalabilidad: si el servicio de pagos falla, las reservas siguen funcionando. Incluye procesamiento de pagos con Stripe, notificaciones automáticas por email y un panel de monitoreo en tiempo real.",
+    technologies: ["Spring Boot WebFlux", "Angular", "PostgreSQL", "Docker", "Stripe", "RabbitMQ", "Redis", "Azure"],
     kpis: [
-      { label: "Servicios", value: "7+" },
+      { label: "Microservicios", value: "7" },
       { label: "Arquitectura", value: "Reactiva" },
       { label: "Uptime", value: "99.9%" },
     ],
@@ -55,22 +43,11 @@ export const PROJECTS: Project[] = [
     title: "Ubik Backend",
     category: "Backend · DevOps",
     year: "2025",
-    description:
-      "Infraestructura backend reactiva con patrones Hexagonal y Saga. Despliegue en Azure con Docker Compose y Nginx.",
-    longDescription:
-      "Este proyecto se centra en la robustez del backend, implementando patrones avanzados como CQRS y Saga para transacciones distribuidas. La infraestructura está automatizada en Azure, utilizando Nginx como Reverse Proxy y SSL gestionado para máxima seguridad.",
-    technologies: [
-      "Java",
-      "WebFlux",
-      "RabbitMQ",
-      "Kafka",
-      "Docker",
-      "Prometheus",
-      "Nginx",
-      "Azure VM",
-    ],
+    description: "Infraestructura backend reactiva con patrones Hexagonal y Saga. Despliegue automatizado en Azure con Docker Compose y Nginx SSL.",
+    longDescription: "La infraestructura que hace correr Ubik. Implementa el patrón Saga para garantizar que una transacción de reserva+pago sea atómica: si el pago falla, la reserva se revierte automáticamente. Desplegado en Azure con CI/CD, Nginx como reverse proxy y certificados SSL gestionados.",
+    technologies: ["Java", "WebFlux", "RabbitMQ", "Kafka", "Docker", "Prometheus", "Nginx", "Azure VM"],
     kpis: [
-      { label: "Mensajería", value: "RabbitMQ/Kafka" },
+      { label: "Mensajería", value: "RabbitMQ" },
       { label: "Escalabilidad", value: "Horizontal" },
       { label: "Monitoreo", value: "Grafana" },
     ],
@@ -83,15 +60,13 @@ export const PROJECTS: Project[] = [
     title: "Palo de Café POS",
     category: "Desktop · Fullstack",
     year: "2024",
-    description:
-      "Sistema de punto de venta e inventario para cliente real, utilizando C# .NET y SQLite para persistencia local de alta velocidad.",
-    longDescription:
-      "Un sistema POS completo desarrollado para optimizar la operación de una cafetería. Incluye módulos de inventario, facturación, reportes de ventas y gestión de clientes. Diseñado con una interfaz intuitiva para reducir el tiempo de capacitación del personal.",
+    description: "Sistema de punto de venta e inventario para cliente real. C# .NET 6 con SQLite para operación offline de alta velocidad.",
+    longDescription: "Sistema completo de caja y gestión para una cafetería en Armenia. Funciona 100% sin internet (base de datos local SQLite), con módulos de ventas, inventario, reportes y cierre de caja. Entregado en producción a un cliente real con capacitación incluida.",
     technologies: ["C#", ".NET 6", "Windows Forms", "SQLite", "Entity Framework"],
     kpis: [
-      { label: "Persistencia", value: "SQLite" },
-      { label: "UI", value: "WinForms" },
       { label: "Estado", value: "Producción" },
+      { label: "Cliente", value: "Real" },
+      { label: "Offline", value: "100%" },
     ],
     architectureType: "desktop",
   },
@@ -101,64 +76,55 @@ export const PROJECTS: Project[] = [
     title: "JWT Security API",
     category: "Backend · Seguridad",
     year: "2025",
-    description:
-      "Implementación de referencia para seguridad JWT en Spring Boot, con filtrado personalizado y gestión de estados.",
-    longDescription:
-      "Una API especializada en la implementación de estándares de seguridad modernos. Gestiona el ciclo de vida completo de tokens JWT, incluyendo revocación, refresco y autorización basada en roles (RBAC) con una configuración de seguridad granular.",
-    technologies: [
-      "Java",
-      "Spring Boot",
-      "Spring Security",
-      "JWT",
-      "Maven",
-      "PostgreSQL",
-    ],
+    description: "API de autenticación JWT con Spring Security, roles granulares y ciclo de vida completo del token (emisión, refresco, revocación).",
+    longDescription: "Implementación de referencia para seguridad en APIs REST. Maneja el ciclo completo: login → token JWT → refresco → logout con revocación. Incluye sistema de roles (admin, usuario, invitado) y protección granular de endpoints. Base reutilizable para cualquier proyecto.",
+    technologies: ["Java", "Spring Boot", "Spring Security", "JWT", "Maven", "PostgreSQL"],
     kpis: [
       { label: "Auth", value: "JWT" },
-      { label: "Standard", value: "OAuth2 Ready" },
-      { label: "Seguridad", value: "Spring Sec" },
+      { label: "Roles", value: "RBAC" },
+      { label: "Ready", value: "OAuth2" },
     ],
     github: "https://github.com/Juankos0714/JWT-api",
     architectureType: "jwt",
   },
 ]
 
-// Fix SRP/OCP: lista de habilidades extraída a datos, pre-computada fuera del componente
-export const SKILLS = {
-  frontend: ["Angular", "React", "TypeScript", "Tailwind CSS", "RxJS", "Framer Motion"],
-  backend: ["Java", "Spring Boot WebFlux", "Node.js", "Python", "C#", "PostgreSQL"],
-  tools: ["Docker", "Git", "GitHub Actions", "Azure", "Vercel", "Postman"],
-} as const
+export const SKILLS: Record<string, string[]> = {
+  "Frontend": ["Angular", "React", "TypeScript", "Tailwind CSS", "RxJS"],
+  "Backend": ["Java", "Spring Boot WebFlux", "Node.js", "C#", "PostgreSQL", "Redis"],
+  "DevOps & Cloud": ["Docker", "Azure", "Nginx", "GitHub Actions", "Prometheus", "Grafana"],
+}
 
-// Fix O(n) → O(1): pre-computar Object.entries una sola vez al nivel de módulo
-export const SKILL_ENTRIES = Object.entries(SKILLS) as [
-  keyof typeof SKILLS,
-  readonly string[],
-][]
+export const SKILL_ENTRIES = Object.entries(SKILLS)
 
-export const EXPERIENCE = [
+export interface ExperienceItem {
+  id: string
+  period: string
+  role: string
+  company: string
+  description: string
+}
+
+export const EXPERIENCE: ExperienceItem[] = [
   {
-    id: "ubik-portfolio",
+    id: "ubik",
     period: "2024 — Presente",
     role: "Desarrollador Fullstack",
     company: "Proyecto Ubik (Portfolio)",
-    description:
-      "Arquitectura de microservicios reactivos, integración de pagos con Stripe, despliegue en Azure y stack completo Angular + Spring Boot WebFlux.",
+    description: "Arquitectura de microservicios reactivos, integración de pagos con Stripe, despliegue en Azure y stack completo Angular + Spring Boot WebFlux.",
   },
   {
-    id: "palo-cafe-client",
+    id: "palo-cafe",
     period: "2024",
     role: "Desarrollador de Software",
     company: "Cliente Palo de Café",
-    description:
-      "Sistema POS e inventario con C# .NET 6 y SQLite. Entrega completa a cliente real con módulos de ventas, productos y reportes.",
+    description: "Sistema POS e inventario con C# .NET 6 y SQLite. Entrega completa a cliente real con módulos de ventas, productos y reportes.",
   },
   {
-    id: "sena-adsi",
+    id: "sena",
     period: "2024 — 2026",
     role: "Tecnólogo en ADSI",
     company: "SENA",
-    description:
-      "Formación en Análisis y Desarrollo de Software. Proyectos prácticos con Java, Angular, Spring Boot y DevOps.",
+    description: "Formación en Análisis y Desarrollo de Software. Proyectos prácticos con Java, Angular, Spring Boot y DevOps.",
   },
 ]

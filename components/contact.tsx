@@ -1,111 +1,82 @@
-// Nota: "use client" requerido por framer-motion motion.* en Next.js App Router
-// Si se migra a CSS animations puras, este componente puede ser Server Component
 "use client"
 
 import { motion } from "framer-motion"
+import { EASE, SOCIAL_LINKS, PERSON } from "@/lib/constants"
+
+const CONTACT_SOCIAL_LINKS = SOCIAL_LINKS.filter(({ label }) => label !== "Email")
 
 export function Contact() {
   return (
-    <section id="contacto" className="px-6 md:px-12 lg:px-24 py-32">
-      <div className="grid grid-cols-12 gap-8">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="col-span-12 lg:col-span-8"
-        >
-          <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground block mb-8">
-            Contacto
-          </span>
-          
-          <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl font-light leading-[0.95] tracking-tight mb-12">
-            Trabajemos
-            <br />
-            <span className="italic text-accent">juntos</span>
-          </h2>
-
-          <p className="text-lg text-muted-foreground max-w-xl leading-relaxed mb-12">
-            Siempre estoy abierto a discutir nuevos proyectos, ideas creativas u 
-            oportunidades para ser parte de tu visión.
-          </p>
-
-          <motion.a
-            href="mailto:juankos0714@gmail.com"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+    <section id="contacto" className="py-24 px-6 md:px-12">
+      <div className="max-w-[1200px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 items-end">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="inline-flex items-center gap-4 group"
+            transition={{ duration: 0.8, ease: EASE }}
           >
-            <span className="text-2xl md:text-3xl font-light hover:text-accent transition-colors duration-300">
-              juankos0714@gmail.com
+            <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono block mb-10">
+              Contacto
             </span>
-            <motion.span 
-              className="w-12 h-12 border border-current flex items-center justify-center group-hover:bg-accent group-hover:border-accent group-hover:text-accent-foreground transition-all duration-300"
-              whileHover={{ scale: 1.1 }}
+            <h2
+              className="font-serif font-normal tracking-tight mb-12"
+              style={{ fontSize: "clamp(3rem, 7vw, 6rem)", lineHeight: 0.95, letterSpacing: "-0.02em" }}
             >
-              <svg 
-                width="20" 
-                height="20" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="1.5"
-              >
-                <path d="M7 17L17 7M17 7H7M17 7V17" />
-              </svg>
-            </motion.span>
-          </motion.a>
-        </motion.div>
+              Trabajemos<br />
+              <em className="not-italic italic text-accent">juntos</em>
+            </h2>
+            <p className="text-[15px] text-muted-foreground max-w-[480px] leading-[1.8] mb-12">
+              Siempre abierto a proyectos interesantes, colaboraciones o simplemente una buena conversación sobre tecnología.
+            </p>
+            <a
+              href={`mailto:${PERSON.email}`}
+              className="inline-flex items-center gap-5 text-foreground hover:text-accent transition-colors duration-300 group"
+              style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.6rem)", fontFamily: "var(--font-serif)" }}
+            >
+              {PERSON.email}
+              <span className="w-11 h-11 border border-current flex items-center justify-center text-xl flex-shrink-0 transition-all duration-300">
+                →
+              </span>
+            </a>
+          </motion.div>
 
-        {/* Right Side - Additional Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="col-span-12 lg:col-span-3 lg:col-start-10 flex flex-col justify-end"
-        >
-          <div className="space-y-8">
+          <motion.div
+            className="flex flex-col gap-8 pb-2"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
+          >
             <div>
-              <span className="text-xs tracking-[0.2em] uppercase text-muted-foreground block mb-3">
+              <span className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground font-mono block mb-2.5">
                 Ubicación
               </span>
-              <p className="text-sm">
-                Armenia, Quindío
-                <br />
-                Colombia 🇨🇴
-                <br />
-                <span className="text-muted-foreground">Disponible remoto</span>
+              <p className="text-[13px] leading-[1.7]">
+                {PERSON.location}<br />
+                <span className="text-muted-foreground">Disponible de forma remota</span>
               </p>
             </div>
-
             <div>
-              <span className="text-xs tracking-[0.2em] uppercase text-muted-foreground block mb-3">
+              <span className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground font-mono block mb-2.5">
                 Redes
               </span>
-              <div className="space-y-2">
-                <a 
-                  href="https://github.com/Juankos0714" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block text-sm hover:text-accent transition-colors duration-300"
-                >
-                  GitHub
-                </a>
-                <a 
-                  href="https://www.linkedin.com/in/juan-camilo-rojas-ospina-453793175/" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block text-sm hover:text-accent transition-colors duration-300"
-                >
-                  LinkedIn
-                </a>
+              <div className="flex flex-col gap-2">
+                {CONTACT_SOCIAL_LINKS.map(({ label, href }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[13px] text-muted-foreground hover:text-accent transition-colors duration-300"
+                  >
+                    {label} ↗
+                  </a>
+                ))}
               </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </section>
   )
