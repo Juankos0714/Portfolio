@@ -1,9 +1,39 @@
 "use client"
 
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { EASE, SOCIAL_LINKS, PERSON } from "@/lib/constants"
 
 const CONTACT_SOCIAL_LINKS = SOCIAL_LINKS.filter(({ label }) => label !== "Email")
+
+function EmailButton() {
+  const [copied, setCopied] = useState(false)
+
+  function handleClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    e.preventDefault()
+    navigator.clipboard.writeText(PERSON.email).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }
+
+  return (
+    <a
+      href={`mailto:${PERSON.email}`}
+      onClick={handleClick}
+      aria-label="Copiar correo electrónico"
+      className="inline-flex items-center gap-5 text-foreground hover:text-accent transition-colors duration-300 group"
+      style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.6rem)", fontFamily: "var(--font-serif)" }}
+    >
+      <span className="transition-opacity duration-200">
+        {copied ? "¡Copiado!" : PERSON.email}
+      </span>
+      <span className="w-11 h-11 border border-current flex items-center justify-center text-xl flex-shrink-0 transition-all duration-300">
+        {copied ? "✓" : "→"}
+      </span>
+    </a>
+  )
+}
 
 export function Contact() {
   return (
@@ -29,16 +59,7 @@ export function Contact() {
             <p className="text-[15px] text-muted-foreground max-w-[480px] leading-[1.8] mb-12">
               Siempre abierto a proyectos interesantes, colaboraciones o simplemente una buena conversación sobre tecnología.
             </p>
-            <a
-              href={`mailto:${PERSON.email}`}
-              className="inline-flex items-center gap-5 text-foreground hover:text-accent transition-colors duration-300 group"
-              style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.6rem)", fontFamily: "var(--font-serif)" }}
-            >
-              {PERSON.email}
-              <span className="w-11 h-11 border border-current flex items-center justify-center text-xl flex-shrink-0 transition-all duration-300">
-                →
-              </span>
-            </a>
+            <EmailButton />
           </motion.div>
 
           <motion.div
