@@ -367,6 +367,57 @@ export function JWTFlowArchitecture() {
   )
 }
 
+// ─── DIAGRAM 4: React + Supabase (Football Predictor) ────────────────────────
+export function ReactSupabaseArchitecture() {
+  return (
+    <div className="flex flex-col items-center gap-0 w-full text-foreground">
+      <DiagramSection title="Capa de presentación — React 18 + TypeScript" color={COLORS.blue}>
+        <div className="flex flex-wrap gap-3 justify-center">
+          {[
+            { l: "Dashboard", s: "Predicciones", i: "📊" },
+            { l: "Gráficos", s: "Plotly.js", i: "📈" },
+            { l: "Auth UI", s: "Login / Registro", i: "🔐" },
+          ].map(({ l, s, i }) => (
+            <DiagramNode key={l} color={COLORS.blue} label={l} sublabel={s} icon={i} />
+          ))}
+        </div>
+      </DiagramSection>
+      <Arrow vertical label="TypeScript" />
+      <DiagramSection
+        title="Algoritmos — ejecución en cliente"
+        color={COLORS.accent}
+        note="Los modelos corren directamente en el navegador. Sin latencia de red para los cálculos estadísticos."
+      >
+        <div className="flex flex-wrap gap-3 justify-center">
+          {[
+            { l: "Elo Rating", s: "Fuerza relativa", i: "⚡" },
+            { l: "Poisson", s: "Goles esperados", i: "🎯" },
+            { l: "Monte Carlo", s: "Simulaciones", i: "🎲" },
+          ].map(({ l, s, i }) => (
+            <DiagramNode key={l} color={COLORS.accent} label={l} sublabel={s} icon={i} />
+          ))}
+        </div>
+      </DiagramSection>
+      <Arrow vertical label="API calls" />
+      <DiagramSection
+        title="Supabase — Backend as a Service"
+        color={COLORS.emerald}
+        note="Supabase provee base de datos PostgreSQL, autenticación con tokens JWT y políticas de seguridad a nivel de fila (RLS), sin necesidad de un servidor propio."
+      >
+        <div className="flex gap-4 justify-center">
+          {[
+            { l: "Auth", s: "JWT tokens", i: "🔑", c: COLORS.amber },
+            { l: "PostgreSQL", s: "equipos · partidos", i: "🗄", c: COLORS.violet },
+            { l: "RLS", s: "Row Level Security", i: "🛡", c: COLORS.emerald },
+          ].map(({ l, s, i, c }) => (
+            <DiagramNode key={l} color={c} label={l} sublabel={s} icon={i} />
+          ))}
+        </div>
+      </DiagramSection>
+    </div>
+  )
+}
+
 export function ArchFallback() {
   return (
     <div className="flex items-center justify-center h-full text-sm text-muted-foreground">

@@ -1,4 +1,4 @@
-export type ArchitectureType = "microservices" | "devops" | "desktop" | "jwt"
+export type ArchitectureType = "microservices" | "devops" | "desktop" | "supabase"
 
 export interface ProjectKPI {
   label: string
@@ -24,15 +24,15 @@ export const PROJECTS: Project[] = [
     number: "01",
     id: "ubik",
     title: "Ubik",
-    category: "Fullstack · Microservicios",
+    category: "Fullstack · Plataforma Web",
     year: "2024–2025",
-    description: "Plataforma de reservas para moteles con arquitectura de 7 microservicios reactivos, gateway JWT, pagos con Stripe y monitoreo.",
-    longDescription: "Ubik es un ecosistema completo para la gestión de reservas en tiempo real. Utiliza microservicios independientes para garantizar escalabilidad: si el servicio de pagos falla, las reservas siguen funcionando. Incluye procesamiento de pagos con Stripe, notificaciones automáticas por email y un panel de monitoreo en tiempo real.",
-    technologies: ["Spring Boot WebFlux", "Angular", "PostgreSQL", "Docker", "Stripe", "RabbitMQ", "Redis", "Azure"],
+    description: "Plataforma de reservas para moteles. SPA en Angular con backend Express/Node.js, pagos con Stripe y mapas interactivos con Leaflet.",
+    longDescription: "Ubik es una plataforma completa para gestión y reserva de habitaciones. El frontend es una SPA en Angular 17+ con Tailwind CSS y Angular Material. El backend en Express/Node.js expone una API REST que gestiona usuarios, reservas y pagos. Los cobros se procesan de forma segura con Stripe y la ubicación de establecimientos se muestra con Leaflet. Desplegado en Vercel con arquitectura hexagonal simplificada separando roles de cliente y propietario.",
+    technologies: ["Angular 17+", "TypeScript", "Express", "Node.js", "Stripe", "Leaflet", "Tailwind CSS", "Vercel"],
     kpis: [
-      { label: "Microservicios", value: "7" },
-      { label: "Arquitectura", value: "Reactiva" },
-      { label: "Uptime", value: "99.9%" },
+      { label: "Frontend", value: "Angular" },
+      { label: "Pagos", value: "Stripe" },
+      { label: "Deploy", value: "Vercel" },
     ],
     github: "https://github.com/Juankos0714/Ubik-App",
     architectureType: "microservices",
@@ -43,9 +43,9 @@ export const PROJECTS: Project[] = [
     title: "Ubik Backend",
     category: "Backend · DevOps",
     year: "2025",
-    description: "Infraestructura backend reactiva con patrones Hexagonal y Saga. Despliegue automatizado en Azure con Docker Compose y Nginx SSL.",
-    longDescription: "La infraestructura que hace correr Ubik. Implementa el patrón Saga para garantizar que una transacción de reserva+pago sea atómica: si el pago falla, la reserva se revierte automáticamente. Desplegado en Azure con CI/CD, Nginx como reverse proxy y certificados SSL gestionados.",
-    technologies: ["Java", "WebFlux", "RabbitMQ", "Kafka", "Docker", "Prometheus", "Nginx", "Azure VM"],
+    description: "Infraestructura backend reactiva con microservicios Spring Boot WebFlux, patrón Saga y despliegue en Azure con Docker Compose y Nginx SSL.",
+    longDescription: "Capa de infraestructura de Ubik. Implementa el patrón Saga para garantizar atomicidad en la transacción reserva+pago: si el pago falla, la reserva se revierte automáticamente. Cada servicio corre en su propio contenedor Docker y se comunica a través de RabbitMQ. Desplegado en Azure con Nginx como reverse proxy y certificados SSL gestionados. Métricas en tiempo real con Prometheus y Grafana.",
+    technologies: ["Java", "Spring Boot WebFlux", "RabbitMQ", "Docker", "Prometheus", "Grafana", "Nginx", "Azure VM"],
     kpis: [
       { label: "Mensajería", value: "RabbitMQ" },
       { label: "Escalabilidad", value: "Horizontal" },
@@ -60,8 +60,8 @@ export const PROJECTS: Project[] = [
     title: "Palo de Café POS",
     category: "Desktop · Fullstack",
     year: "2024",
-    description: "Sistema de punto de venta e inventario para cliente real. C# .NET 6 con SQLite para operación offline de alta velocidad.",
-    longDescription: "Sistema completo de caja y gestión para una cafetería en Armenia. Funciona 100% sin internet (base de datos local SQLite), con módulos de ventas, inventario, reportes y cierre de caja. Entregado en producción a un cliente real con capacitación incluida.",
+    description: "Sistema de punto de venta e inventario para cliente real en Armenia. C# .NET 6 con SQLite para operación 100% offline.",
+    longDescription: "Sistema completo de caja y gestión para una cafetería en Armenia, Colombia. Funciona sin conexión a internet con base de datos local SQLite, incluyendo módulos de ventas, inventario, reportes y cierre de caja. Entregado en producción a un cliente real con capacitación y soporte técnico incluidos.",
     technologies: ["C#", ".NET 6", "Windows Forms", "SQLite", "Entity Framework"],
     kpis: [
       { label: "Estado", value: "Producción" },
@@ -72,27 +72,27 @@ export const PROJECTS: Project[] = [
   },
   {
     number: "04",
-    id: "jwt-api",
-    title: "JWT Security API",
-    category: "Backend · Seguridad",
+    id: "football-predictor",
+    title: "Football Predictor",
+    category: "Frontend · Data Science",
     year: "2025",
-    description: "API de autenticación JWT con Spring Security, roles granulares y ciclo de vida completo del token (emisión, refresco, revocación).",
-    longDescription: "Implementación de referencia para seguridad en APIs REST. Maneja el ciclo completo: login → token JWT → refresco → logout con revocación. Incluye sistema de roles (admin, usuario, invitado) y protección granular de endpoints. Base reutilizable para cualquier proyecto.",
-    technologies: ["Java", "Spring Boot", "Spring Security", "JWT", "Maven", "PostgreSQL"],
+    description: "Aplicación de predicción de resultados de fútbol europeo mediante modelos matemáticos Elo, Poisson y simulaciones Monte Carlo implementados en TypeScript.",
+    longDescription: "Herramienta de análisis estadístico construida con React 18 y TypeScript. Implementa tres modelos de predicción: ratings Elo para medir la fuerza relativa de equipos, distribución de Poisson para calcular goles esperados y simulaciones Monte Carlo para estimar probabilidades de resultado. Los datos y la autenticación corren sobre Supabase (PostgreSQL + Auth con JWT), y los resultados se visualizan con Plotly.js.",
+    technologies: ["React 18", "TypeScript", "Vite", "Supabase", "PostgreSQL", "Plotly.js", "Tailwind CSS"],
     kpis: [
-      { label: "Auth", value: "JWT" },
-      { label: "Roles", value: "RBAC" },
-      { label: "Ready", value: "OAuth2" },
+      { label: "Modelos", value: "3" },
+      { label: "Algoritmos", value: "Elo · Poisson" },
+      { label: "Backend", value: "Supabase" },
     ],
-    github: "https://github.com/Juankos0714/JWT-api",
-    architectureType: "jwt",
+    github: "https://github.com/Juankos0714/ejercicioMachineLearning",
+    architectureType: "supabase",
   },
 ]
 
 export const SKILLS: Record<string, string[]> = {
-  "Frontend": ["Angular", "React", "TypeScript", "Tailwind CSS", "RxJS"],
-  "Backend": ["Java", "Spring Boot WebFlux", "Node.js", "C#", "PostgreSQL", "Redis"],
-  "DevOps & Cloud": ["Docker", "Azure", "Nginx", "GitHub Actions", "Prometheus", "Grafana"],
+  "Frontend": ["Angular 17+", "React 18", "TypeScript", "Tailwind CSS", "RxJS"],
+  "Backend": ["Java", "Spring Boot WebFlux", "Express", "Node.js", "C#", "PostgreSQL"],
+  "DevOps & Cloud": ["Docker", "Azure", "Nginx", "Supabase", "GitHub Actions", "Vercel"],
 }
 
 export const SKILL_ENTRIES = Object.entries(SKILLS)
@@ -111,20 +111,20 @@ export const EXPERIENCE: ExperienceItem[] = [
     period: "2024 — Presente",
     role: "Desarrollador Fullstack",
     company: "Proyecto Ubik (Portfolio)",
-    description: "Arquitectura de microservicios reactivos, integración de pagos con Stripe, despliegue en Azure y stack completo Angular + Spring Boot WebFlux.",
+    description: "Plataforma web fullstack para gestión de reservas: SPA Angular 17+, backend Express/Node.js, pagos con Stripe y despliegue en Vercel. Backend de microservicios con Spring Boot WebFlux y Docker en Azure.",
   },
   {
     id: "palo-cafe",
     period: "2024",
     role: "Desarrollador de Software",
-    company: "Cliente Palo de Café",
-    description: "Sistema POS e inventario con C# .NET 6 y SQLite. Entrega completa a cliente real con módulos de ventas, productos y reportes.",
+    company: "Cliente Palo de Café — Armenia",
+    description: "Sistema POS e inventario con C# .NET 6 y SQLite. Entrega completa a cliente real con módulos de ventas, productos, reportes y capacitación presencial.",
   },
   {
     id: "sena",
     period: "2024 — 2026",
     role: "Tecnólogo en ADSI",
     company: "SENA",
-    description: "Formación en Análisis y Desarrollo de Software. Proyectos prácticos con Java, Angular, Spring Boot y DevOps.",
+    description: "Análisis y Desarrollo de Software. Formación práctica en Java, Angular, React, Spring Boot, Docker y despliegue en nube.",
   },
 ]

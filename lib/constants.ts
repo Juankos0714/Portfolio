@@ -12,10 +12,10 @@ export const NAV_LINKS = [
 ] as const
 
 export const HERO_TECH_TAGS = [
-  "Java · Spring Boot WebFlux",
-  "Angular",
-  "Microservicios",
-  "Azure · Docker",
+  "Java · Spring Boot",
+  "Angular · React",
+  "TypeScript",
+  "Docker · Azure",
 ] as const
 
 // Scale factors for cursor parallax layers. Each axis moves at a different

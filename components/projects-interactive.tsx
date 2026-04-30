@@ -9,22 +9,21 @@ import {
   UbikArchitecture,
   DevOpsAzureArchitecture,
   POSPaloCafeArchitecture,
-  JWTFlowArchitecture,
+  ReactSupabaseArchitecture,
 } from "@/components/diagrams/architecture-diagrams"
 
-// Fix OCP+O(1): map de arquitecturas — O(1) lookup, abierto para extensión sin modificar el dispatcher
 const ARQUITECTURA_MAP: Record<ArchitectureType, React.ComponentType> = {
   microservices: UbikArchitecture,
   devops: DevOpsAzureArchitecture,
   desktop: POSPaloCafeArchitecture,
-  jwt: JWTFlowArchitecture,
+  supabase: ReactSupabaseArchitecture,
 }
 
 const ETIQUETAS_DIAGRAMA: Record<ArchitectureType, string> = {
-  microservices: "Arquitectura de Microservicios",
+  microservices: "Arquitectura Angular + Express",
   devops: "Infraestructura & DevOps",
   desktop: "Arquitectura de Escritorio (3 capas)",
-  jwt: "Flujo de Autenticación JWT",
+  supabase: "Stack React + Supabase",
 }
 
 // --- ComponenteArquitectura (SRP) ---
