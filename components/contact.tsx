@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { EASE, SOCIAL_LINKS, PERSON } from "@/lib/constants"
 
 const CONTACT_SOCIAL_LINKS = SOCIAL_LINKS.filter(({ label }) => label !== "Email")
@@ -18,20 +18,26 @@ function EmailButton() {
   }
 
   return (
-    <a
+    <motion.a
       href={`mailto:${PERSON.email}`}
       onClick={handleClick}
       aria-label="Copy email address"
       className="inline-flex items-center gap-5 text-foreground hover:text-accent transition-colors duration-300 group"
       style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.6rem)", fontFamily: "var(--font-serif)" }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
     >
       <span className="transition-opacity duration-200">
         {copied ? "Copied!" : PERSON.email}
       </span>
-      <span className="w-11 h-11 border border-current flex items-center justify-center text-xl flex-shrink-0 transition-all duration-300">
-        {copied ? "✓" : "→"}
+      <span className="w-11 h-11 border border-current flex items-center justify-center flex-shrink-0 transition-all duration-300">
+        {copied ? (
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 6L9 17l-5-5" /></svg>
+        ) : (
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+        )}
       </span>
-    </a>
+    </motion.a>
   )
 }
 
@@ -89,9 +95,10 @@ export function Contact() {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[13px] text-muted-foreground hover:text-accent transition-colors duration-300"
+                    className="text-[13px] text-muted-foreground hover:text-accent transition-colors duration-300 flex items-center gap-1"
                   >
-                    {label} ↗
+                    {label}
+                    <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
                   </a>
                 ))}
               </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { EXPERIENCES, type ExperienceEntry } from "@/lib/constants"
 import { EASE } from "@/lib/constants"
 
@@ -25,7 +25,8 @@ function ExperienceCard({ item, index }: { item: ExperienceEntry; index: number 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, delay: index * 0.1, ease: EASE }}
-      className="border-t border-border pt-8 pb-8"
+      whileHover={{ x: 4 }}
+      className="border-t border-border pt-8 pb-8 transition-colors duration-300"
     >
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
         <div>
@@ -68,7 +69,16 @@ function ExperienceCard({ item, index }: { item: ExperienceEntry; index: number 
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-[12px] tracking-[0.05em] text-muted-foreground hover:text-accent transition-colors duration-300"
         >
-          {item.projectLabel || "View project"} →
+          {item.projectLabel || "View project"}
+          <motion.svg
+            className="w-3.5 h-3.5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            whileHover={{ x: 4 }}
+            transition={{ type: "spring", stiffness: 400, damping: 20 }}
+          ><path d="M5 12h14M12 5l7 7-7 7" /></motion.svg>
         </a>
       )}
     </motion.div>

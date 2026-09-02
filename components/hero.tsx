@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { useTheme } from "next-themes"
 import {
   EASE,
@@ -77,23 +77,36 @@ interface HeroNavProps {
   onToggleTheme: () => void
 }
 
+// Stagger container variants — coordinates the sequential reveal of hero elements.
+// Each child animates in order with a brief gap between them.
+const heroStagger = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.12, delayChildren: 0.15 },
+  },
+}
+
+// Shared child variant — each element fades in and slides up.
+const heroChild = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: EASE },
+  },
+}
+
 function HeroNav({ mounted, isDark, onToggleTheme }: HeroNavProps) {
   return (
     <header className="flex justify-between items-center">
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: EASE }}
-      >
+      <motion.div variants={heroChild}>
         <span className="text-[11px] tracking-[0.28em] uppercase text-muted-foreground font-mono">
           Portfolio 2026
         </span>
       </motion.div>
 
       <motion.nav
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.1, ease: EASE }}
+        variants={heroChild}
         className="flex gap-8 md:gap-10 items-center"
       >
         {NAV_LINKS.map(({ href, label }) => (
@@ -125,9 +138,9 @@ function HeroPhoto({ tx, ty }: { tx: number; ty: number }) {
   return (
     <motion.div
       className="hidden lg:block"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1.2, delay: 0.4, ease: EASE }}
+      initial={{ opacity: 0, scale: 0.97 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 1, delay: 0.5, ease: EASE }}
     >
       <div
         style={{
@@ -170,25 +183,26 @@ function HeroSocialLinks() {
   return (
     <motion.footer
       className="flex justify-between items-end pt-8 border-t border-border"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1, delay: 1 }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 1.2, ease: EASE }}
     >
       <span className="text-[11px] font-mono tracking-[0.1em] text-muted-foreground">
         {PERSON.location}
       </span>
-      <div className="flex gap-6 md:gap-7">
-        {SOCIAL_LINKS.map(({ label, href }) => (
-          <a
+      <div className="flex gap-6 md:gap-7">              {SOCIAL_LINKS.map(({ label, href }) => (
+          <motion.a
             key={label}
             href={href}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-[12px] text-muted-foreground hover:text-accent transition-colors duration-300 tracking-[0.06em]"
+            whileHover={{ y: -2 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
             {label}
-          </a>
+          </motion.a>
         ))}
       </div>
     </motion.footer>
@@ -222,34 +236,25 @@ export function Hero() {
 
         <div className="flex flex-1 items-center pt-10">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 lg:gap-16 w-full items-center">
-            <div>
+            <motion.div
+              variants={heroStagger}
+              initial="hidden"
+              animate="visible"
+            >
               <motion.p
+                variants={heroChild}
                 className="text-[12px] tracking-[0.3em] uppercase text-muted-foreground font-mono mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.2, ease: EASE }}
               >
                 {PERSON.role}
               </motion.p>
 
-              <motion.p
-                className="text-[14px] text-muted-foreground mb-4 max-w-[420px]"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.35, ease: EASE }}
-              >
-                {PERSON.tagline}
-              </motion.p>
-
-              {/* Framer Motion manages entrance opacity; inline style manages cursor
-                  parallax — keeping them on separate properties avoids transform
-                  conflicts between the two animation systems. */}
+              {/* The name uses Motion for entrance opacity/translate, but cursor
+                  parallax is kept on inline transform via separate CSS transitions.
+                  Splitting them avoids transform conflicts between the two systems. */}
               <motion.h1
                 className="font-serif font-normal tracking-tight mb-8"
                 style={{ fontSize: "clamp(3.5rem, 9vw, 8rem)", lineHeight: 1.0, letterSpacing: "-0.02em" }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1.2, delay: 0.3, ease: EASE }}
+                variants={heroChild}
               >
                 <span className="block">Juan</span>
                 <span
@@ -272,11 +277,16 @@ export function Hero() {
                 </span>
               </motion.h1>
 
+              <motion.p
+                variants={heroChild}
+                className="text-[14px] text-muted-foreground mb-4 max-w-[420px]"
+              >
+                {PERSON.tagline}
+              </motion.p>
+
               <motion.div
+                variants={heroChild}
                 className="flex flex-wrap gap-2 mb-12"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1, delay: 0.6, ease: EASE }}
               >
                 {HERO_TECH_TAGS.map((tag) => (
                   <span
@@ -288,20 +298,26 @@ export function Hero() {
                 ))}
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1, delay: 0.8, ease: EASE }}
-              >
-                <a
+              <motion.div variants={heroChild}>
+                <motion.a
                   href="#work"
                   className="inline-flex items-center gap-4 px-7 py-3.5 border border-foreground text-foreground hover:bg-foreground hover:text-background transition-all duration-300 text-sm tracking-[0.04em]"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   View projects
-                  <span className="text-lg leading-none">→</span>
-                </a>
+                  <motion.svg
+                    className="w-4 h-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    whileHover={{ x: 4 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                  ><path d="M5 12h14M12 5l7 7-7 7" /></motion.svg>
+                </motion.a>
               </motion.div>
-            </div>
+            </motion.div>
 
             <HeroPhoto tx={tx} ty={ty} />
           </div>

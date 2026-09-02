@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "motion/react"
 import { PROJECTS } from "@/lib/data/portfolio"
 import type { Project, ArchitectureType } from "@/lib/data/portfolio"
 import { EASE } from "@/lib/constants"
@@ -143,14 +143,25 @@ function FilaProyecto({ proyecto }: { proyecto: Project }) {
                 </div>
 
                 {proyecto.github && (
-                  <a
+                  <motion.a
                     href={proyecto.github}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2.5 text-[12px] tracking-[0.05em] px-5 py-2.5 border border-border text-foreground hover:border-accent hover:text-accent transition-all duration-300"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    View on GitHub →
-                  </a>
+                    View on GitHub
+                    <motion.svg
+                      className="w-3.5 h-3.5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      whileHover={{ x: 4 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                    ><path d="M7 17L17 7M17 7H7M17 7v10" /></motion.svg>
+                  </motion.a>
                 )}
               </div>
 
@@ -193,15 +204,17 @@ export function ProjectsInteractive() {
         ))}
 
         <div className="border-t border-border pt-8 flex justify-end">
-          <a
+          <motion.a
             href="https://github.com/Juankos0714"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 text-[13px] text-muted-foreground hover:text-accent transition-colors duration-300 tracking-[0.05em]"
+            whileHover={{ x: 4 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
           >
             View all projects on GitHub
-            <span className="w-8 h-px bg-current block transition-[width] duration-300 group-hover:w-12" />
-          </a>
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+          </motion.a>
         </div>
       </div>
     </section>

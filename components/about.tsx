@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { SKILL_ENTRIES } from "@/lib/data/portfolio"
 import { EASE, PHOTO_SRC, PERSON } from "@/lib/constants"
 

@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { EASE } from "@/lib/constants"
 
 interface OtherProject {
@@ -49,19 +49,23 @@ function OtherProjectCard({ project, index }: { project: OtherProject; index: nu
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay: index * 0.06, ease: EASE }}
+      whileHover={{ y: -2, transition: { duration: 0.2 } }}
       className="border border-border p-5 hover:border-accent transition-colors duration-300 flex flex-col"
     >
       <div className="flex items-start justify-between gap-3 mb-3">
         <h3 className="text-[14px] font-medium tracking-tight">{project.name}</h3>
         {project.github && (
-          <a
+          <motion.a
             href={project.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[11px] text-muted-foreground hover:text-accent transition-colors duration-300 font-mono whitespace-nowrap"
+            className="text-[11px] text-muted-foreground hover:text-accent transition-colors duration-300 font-mono whitespace-nowrap flex items-center gap-1"
+            whileHover={{ x: 2 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
           >
-            GitHub →
-          </a>
+            GitHub
+            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
+          </motion.a>
         )}
       </div>
       <p className="text-[12px] leading-[1.7] text-muted-foreground mb-4 flex-1">
