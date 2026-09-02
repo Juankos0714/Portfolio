@@ -1,14 +1,13 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { SKILL_ENTRIES, EXPERIENCE } from "@/lib/data/portfolio"
+import { SKILL_ENTRIES } from "@/lib/data/portfolio"
 import { EASE, PHOTO_SRC, PERSON } from "@/lib/constants"
-import { cn } from "@/lib/utils"
 
 export function About() {
   return (
     <section
-      id="sobre-mi"
+      id="about"
       className="py-24 px-6 md:px-12"
       style={{ background: "var(--section-bg)" }}
     >
@@ -21,7 +20,7 @@ export function About() {
             transition={{ duration: 0.8, ease: EASE }}
           >
             <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono block mb-10">
-              Sobre mí
+              About
             </span>
 
             <div className="relative mb-12 inline-block">
@@ -42,19 +41,16 @@ export function About() {
               className="font-serif font-normal tracking-tight leading-[1.1] mb-7"
               style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)", letterSpacing: "-0.01em" }}
             >
-              Construyendo<br />
-              <em className="not-italic italic text-accent">con propósito</em>
+              Building<br />
+              <em className="not-italic italic text-accent">with purpose</em>
             </h2>
 
             <div className="flex flex-col gap-4">
               <p className="text-[14px] leading-[1.8] text-muted-foreground">
-                Desarrollador fullstack enfocado en backend reactivo con Java/Spring Boot WebFlux y frontend moderno con Angular.
+                Product Engineer building complete products, scalable systems, and AI-powered applications. I work across the full stack — from reactive microservices to polished user interfaces.
               </p>
               <p className="text-[14px] leading-[1.8] text-muted-foreground">
-                Me especializo en arquitecturas de microservicios, integración de pagos y despliegue en nube. Optimizando rendimiento y experiencia de usuario.
-              </p>
-              <p className="text-[14px] leading-[1.8] text-muted-foreground">
-                Creo que el mejor código resuelve problemas reales con elegancia técnica.
+                I specialize in system architecture, cloud infrastructure, and shipping software that runs in production. I believe the best code solves real problems with technical elegance.
               </p>
             </div>
           </motion.div>
@@ -68,7 +64,7 @@ export function About() {
           >
             <div>
               <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono block mb-7">
-                Tecnologías
+                Technologies
               </span>
               <div className="flex flex-col gap-6">
                 {SKILL_ENTRIES.map(([cat, items]) => (
@@ -93,31 +89,25 @@ export function About() {
 
             <div>
               <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono block mb-7">
-                Experiencia
+                Quick Facts
               </span>
-              <div>
-                {EXPERIENCE.map((item, i) => (
-                  <div
-                    key={item.id}
-                    className={cn(
-                      "grid grid-cols-[120px_1fr] gap-5 py-5 border-b border-border",
-                      i === 0 && "border-t"
-                    )}
-                  >
-                    <span className="text-[10px] text-muted-foreground font-mono pt-0.5">
-                      {item.period}
-                    </span>
-                    <div>
-                      <h4 className="text-[14px] font-medium mb-1">{item.role}</h4>
-                      <span className="text-[12px] text-muted-foreground block mb-2">
-                        {item.company}
-                      </span>
-                      <p className="text-[12px] text-muted-foreground leading-[1.7]">
-                        {item.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+              <div className="flex flex-col gap-4">
+                <div className="grid grid-cols-[100px_1fr] gap-4">
+                  <span className="text-[11px] text-muted-foreground font-mono">Languages</span>
+                  <span className="text-[13px]">Java, TypeScript, Python, C#, C++, Dart, SQL</span>
+                </div>
+                <div className="grid grid-cols-[100px_1fr] gap-4">
+                  <span className="text-[11px] text-muted-foreground font-mono">Frontend</span>
+                  <span className="text-[13px]">Angular, React, Next.js, SvelteKit, Flutter</span>
+                </div>
+                <div className="grid grid-cols-[100px_1fr] gap-4">
+                  <span className="text-[11px] text-muted-foreground font-mono">Backend</span>
+                  <span className="text-[13px]">Spring Boot, WebFlux, FastAPI, Node.js</span>
+                </div>
+                <div className="grid grid-cols-[100px_1fr] gap-4">
+                  <span className="text-[11px] text-muted-foreground font-mono">Cloud</span>
+                  <span className="text-[13px]">Azure, Vercel, Docker, Nginx, GitHub Actions</span>
+                </div>
               </div>
             </div>
           </motion.div>

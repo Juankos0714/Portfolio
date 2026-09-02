@@ -7,23 +7,28 @@ import type { Project, ArchitectureType } from "@/lib/data/portfolio"
 import { EASE } from "@/lib/constants"
 import {
   UbikArchitecture,
-  DevOpsAzureArchitecture,
-  POSPaloCafeArchitecture,
+  StarGoArchitecture,
+  VentaDeLotesArchitecture,
+  NullBotArchitecture,
   ReactSupabaseArchitecture,
 } from "@/components/diagrams/architecture-diagrams"
 
 const ARQUITECTURA_MAP: Record<ArchitectureType, React.ComponentType> = {
   microservices: UbikArchitecture,
-  devops: DevOpsAzureArchitecture,
-  desktop: POSPaloCafeArchitecture,
-  supabase: ReactSupabaseArchitecture,
+  realtime: StarGoArchitecture,
+  supabase: VentaDeLotesArchitecture,
+  security: NullBotArchitecture,
+  devops: ReactSupabaseArchitecture,
+  desktop: ReactSupabaseArchitecture,
 }
 
 const ETIQUETAS_DIAGRAMA: Record<ArchitectureType, string> = {
-  microservices: "Arquitectura Angular + Express",
-  devops: "Infraestructura & DevOps",
-  desktop: "Arquitectura de Escritorio (3 capas)",
-  supabase: "Stack React + Supabase",
+  microservices: "Reactive Microservices",
+  realtime: "Real-Time Platform",
+  supabase: "React + Supabase Stack",
+  security: "Security Architecture",
+  devops: "Infrastructure & DevOps",
+  desktop: "Desktop Architecture",
 }
 
 // --- ComponenteArquitectura (SRP) ---
@@ -123,7 +128,7 @@ function FilaProyecto({ proyecto }: { proyecto: Project }) {
                 {/* Tecnologías */}
                 <div className="mb-7">
                   <span className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground font-mono block mb-3">
-                    Tecnologías
+                    Technologies
                   </span>
                   <div className="flex flex-wrap gap-2">
                     {proyecto.technologies.map((t) => (
@@ -144,7 +149,7 @@ function FilaProyecto({ proyecto }: { proyecto: Project }) {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2.5 text-[12px] tracking-[0.05em] px-5 py-2.5 border border-border text-foreground hover:border-accent hover:text-accent transition-all duration-300"
                   >
-                    Ver en GitHub →
+                    View on GitHub →
                   </a>
                 )}
               </div>
@@ -168,7 +173,7 @@ function FilaProyecto({ proyecto }: { proyecto: Project }) {
 
 export function ProjectsInteractive() {
   return (
-    <section id="trabajo" className="py-24 max-w-[1200px] mx-auto px-6 md:px-12">
+    <section id="work" className="py-24 max-w-[1200px] mx-auto px-6 md:px-12">
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -177,7 +182,7 @@ export function ProjectsInteractive() {
         className="mb-16"
       >
         <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono">
-          Proyectos Seleccionados
+          Featured Projects
         </span>
       </motion.div>
 
@@ -194,7 +199,7 @@ export function ProjectsInteractive() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 text-[13px] text-muted-foreground hover:text-accent transition-colors duration-300 tracking-[0.05em]"
           >
-            Ver todos los proyectos en GitHub
+            View all projects on GitHub
             <span className="w-8 h-px bg-current block transition-[width] duration-300 group-hover:w-12" />
           </a>
         </div>

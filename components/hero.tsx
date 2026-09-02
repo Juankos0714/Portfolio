@@ -157,7 +157,7 @@ function HeroPhoto({ tx, ty }: { tx: number; ty: number }) {
           <div className="absolute -bottom-4 left-4 flex items-center gap-2 bg-background border border-border px-4 py-2">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-dot" />
             <span className="text-[11px] font-mono tracking-[0.08em] text-muted-foreground">
-              DISPONIBLE
+              AVAILABLE
             </span>
           </div>
         </div>
@@ -232,6 +232,15 @@ export function Hero() {
                 {PERSON.role}
               </motion.p>
 
+              <motion.p
+                className="text-[14px] text-muted-foreground mb-4 max-w-[420px]"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.35, ease: EASE }}
+              >
+                {PERSON.tagline}
+              </motion.p>
+
               {/* Framer Motion manages entrance opacity; inline style manages cursor
                   parallax — keeping them on separate properties avoids transform
                   conflicts between the two animation systems. */}
@@ -285,10 +294,10 @@ export function Hero() {
                 transition={{ duration: 1, delay: 0.8, ease: EASE }}
               >
                 <a
-                  href="#trabajo"
+                  href="#work"
                   className="inline-flex items-center gap-4 px-7 py-3.5 border border-foreground text-foreground hover:bg-foreground hover:text-background transition-all duration-300 text-sm tracking-[0.04em]"
                 >
-                  Ver proyectos
+                  View projects
                   <span className="text-lg leading-none">→</span>
                 </a>
               </motion.div>

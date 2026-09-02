@@ -24,8 +24,8 @@ const dmMono = DM_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Juan Camilo Rojas — Desarrollador Fullstack',
-  description: 'Desarrollador Fullstack especializado en Spring Boot WebFlux, Angular y arquitectura de microservicios. Disponible para proyectos remotos.',
+  title: 'Juan Camilo Rojas — Product Engineer · Full-Stack Developer',
+  description: 'Building products, designing systems, and shipping software. Full-stack developer specialized in reactive microservices, cloud architecture, and applied AI.',
   icons: {
     icon: [
       { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
@@ -34,13 +34,18 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-icon.png',
   },
+  openGraph: {
+    title: 'Juan Camilo Rojas — Product Engineer · Full-Stack Developer',
+    description: 'Building products, designing systems, and shipping software. Reactive microservices, cloud architecture, and applied AI.',
+    type: 'website',
+  },
 }
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body className={`${playfair.variable} ${dmSans.variable} ${dmMono.variable} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           {children}

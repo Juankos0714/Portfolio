@@ -10,6 +10,7 @@ const COLORS = {
   violet: "#8b5cf6",
   emerald: "#10b981",
   sky: "#60a5fa",
+  rose: "#f43f5e",
 } as const
 
 type DiagramColor = (typeof COLORS)[keyof typeof COLORS]
@@ -119,66 +120,66 @@ function DiagramSection({ title, color, note, children }: SectionProps) {
 export function UbikArchitecture() {
   return (
     <div className="flex flex-col items-center gap-0 w-full text-foreground">
-      <DiagramSection title="Capa de presentación" color={COLORS.blue}>
+      <DiagramSection title="Presentation Layer" color={COLORS.blue}>
         <div className="flex justify-center gap-6">
-          <DiagramNode color={COLORS.blue} label="Navegador Web" sublabel="Angular SPA" icon="🖥" />
-          <DiagramNode color={COLORS.blue} label="App Móvil" sublabel="Futuro cliente" icon="📱" />
+          <DiagramNode color={COLORS.blue} label="Web Browser" sublabel="Angular 17+ SPA" icon="🖥" />
+          <DiagramNode color={COLORS.blue} label="Mobile App" sublabel="Future client" icon="📱" />
         </div>
       </DiagramSection>
       <Arrow vertical label="HTTPS" />
       <DiagramSection
-        title="Seguridad — API Gateway"
+        title="Security — API Gateway"
         color={COLORS.accent}
-        note="Todas las peticiones pasan por aquí. Verifica tokens y decide a qué servicio enviar la solicitud."
+        note="All requests pass through here. Verifies JWT tokens and routes to the correct service."
       >
         <div className="flex justify-center items-center gap-3">
-          <DiagramNode color={COLORS.accent} label="JWT Gateway" sublabel="Autenticación" icon="🔐" />
-          <DiagramBadge label="Spring Security" color={COLORS.accent} />
+          <DiagramNode color={COLORS.accent} label="Spring Cloud Gateway" sublabel="JWT + RBAC" icon="🔐" />
+          <DiagramBadge label="Netflix Eureka" color={COLORS.accent} />
         </div>
       </DiagramSection>
-      <Arrow vertical label="enruta" />
+      <Arrow vertical label="routes" />
       <DiagramSection
-        title="7 Microservicios independientes"
+        title="7 Reactive Microservices"
         color={COLORS.purple}
-        note="Cada servicio hace una sola cosa. Si uno falla, los demás siguen funcionando."
+        note="Each service handles one concern. If one fails, the others keep running."
       >
         <div className="flex flex-wrap justify-center gap-3">
           {[
-            { l: "Usuarios", s: "Registro / Login" },
-            { l: "Reservas", s: "Disponibilidad" },
-            { l: "Pagos", s: "Stripe" },
-            { l: "Notif.", s: "Email / Push" },
-            { l: "Propietario", s: "Panel admin" },
-            { l: "Habitaciones", s: "Inventario" },
-            { l: "Reportes", s: "Analytics" },
+            { l: "Users", s: "Auth / JWT" },
+            { l: "Reservations", s: "Availability" },
+            { l: "Payments", s: "Stripe" },
+            { l: "Notifications", s: "Email / Push" },
+            { l: "Owner", s: "Admin panel" },
+            { l: "Rooms", s: "Inventory" },
+            { l: "Analytics", s: "Metrics" },
           ].map(({ l, s }) => (
             <DiagramNode key={l} color={COLORS.purple} label={l} sublabel={s} icon="⚙️" />
           ))}
         </div>
       </DiagramSection>
-      <Arrow vertical label="eventos async" />
+      <Arrow vertical label="async events" />
       <DiagramSection
-        title="Bus de mensajes"
+        title="Event Bus"
         color={COLORS.amber}
-        note="Los servicios se comunican sin depender directamente unos de otros."
+        note="Services communicate asynchronously via Kafka and RabbitMQ."
       >
         <div className="flex justify-center gap-5">
-          <DiagramNode color={COLORS.amber} label="RabbitMQ" sublabel="Cola de eventos" icon="🐰" />
-          <DiagramNode color={COLORS.amber} label="Kafka" sublabel="Streams" icon="📨" />
+          <DiagramNode color={COLORS.amber} label="Kafka" sublabel="Event streaming" icon="📨" />
+          <DiagramNode color={COLORS.amber} label="RabbitMQ" sublabel="Message queue" icon="🐰" />
         </div>
       </DiagramSection>
-      <Arrow vertical label="persiste" />
+      <Arrow vertical label="persists" />
       <div className="flex gap-4 w-full">
         <div className="flex-1">
-          <DiagramSection title="Datos" color={COLORS.violet}>
-            <DiagramNode color={COLORS.violet} label="PostgreSQL" sublabel="Base de datos" icon="🗄" />
+          <DiagramSection title="Data" color={COLORS.violet}>
+            <DiagramNode color={COLORS.violet} label="PostgreSQL" sublabel="R2DBC reactive" icon="🗄" />
           </DiagramSection>
         </div>
         <div className="flex-1">
-          <DiagramSection title="Monitoreo" color={COLORS.emerald}>
+          <DiagramSection title="Observability" color={COLORS.emerald}>
             <div className="flex gap-3 justify-center">
-              <DiagramNode color={COLORS.emerald} label="Prometheus" sublabel="Métricas" icon="📊" />
-              <DiagramNode color={COLORS.emerald} label="Grafana" sublabel="Dashboard" icon="📈" />
+              <DiagramNode color={COLORS.emerald} label="Prometheus" sublabel="Metrics" icon="📊" />
+              <DiagramNode color={COLORS.emerald} label="Grafana" sublabel="Dashboards" icon="📈" />
             </div>
           </DiagramSection>
         </div>
@@ -187,109 +188,163 @@ export function UbikArchitecture() {
   )
 }
 
-// ─── DIAGRAM 2: DevOps / Azure ────────────────────────────────────────────────
-export function DevOpsAzureArchitecture() {
+// ─── DIAGRAM 2: StarGo Real-Time Platform ────────────────────────────────────
+export function StarGoArchitecture() {
   return (
     <div className="flex flex-col items-center gap-0 w-full text-foreground">
-      <DiagramSection title="Internet" color={COLORS.blue}>
-        <div className="flex justify-center">
-          <DiagramNode color={COLORS.blue} label="Usuario" sublabel="Cualquier navegador" icon="🌐" />
+      <DiagramSection title="Client Apps" color={COLORS.blue}>
+        <div className="flex justify-center gap-4">
+          <DiagramNode color={COLORS.blue} label="PWA (Web)" sublabel="SvelteKit 5" icon="🌐" />
+          <DiagramNode color={COLORS.blue} label="Android" sublabel="Capacitor APK" icon="🤖" />
+          <DiagramNode color={COLORS.blue} label="iOS" sublabel="TestFlight" icon="🍎" />
         </div>
       </DiagramSection>
-      <Arrow vertical label="dominio + SSL" />
+      <Arrow vertical label="HTTPS" />
       <DiagramSection
-        title="Reverse Proxy"
+        title="Role-Based Access"
         color={COLORS.accent}
-        note="Nginx recibe todas las peticiones, aplica el certificado SSL y las reenvía a los contenedores internos."
+        note="Three differentiated roles: client, admin, delivery driver. Each sees their own dashboard."
       >
-        <div className="flex justify-center items-center gap-3">
-          <DiagramNode color={COLORS.accent} label="Nginx" sublabel="SSL · Balanceo" icon="🔒" />
-          <DiagramBadge label="Let's Encrypt" color={COLORS.accent} />
+        <div className="flex justify-center gap-4">
+          <DiagramNode color={COLORS.accent} label="Client" sublabel="/nuevo-pedido" icon="👤" />
+          <DiagramNode color={COLORS.accent} label="Admin" sublabel="/admin/*" icon="👑" />
+          <DiagramNode color={COLORS.accent} label="Driver" sublabel="/domiciliario" icon="🛵" />
         </div>
       </DiagramSection>
-      <Arrow vertical label="tráfico interno" />
+      <Arrow vertical label="realtime" />
       <DiagramSection
-        title="Azure VM — Ubuntu Server"
-        color={COLORS.blue}
-        note="Servidor virtual en la nube. Todo corre dentro de este servidor."
+        title="Supabase — BaaS"
+        color={COLORS.emerald}
+        note="Auth, PostgreSQL with RLS, Realtime subscriptions, Edge Functions, and RPCs for business logic."
       >
-        <DiagramSection
-          title="Docker Compose — contenedores aislados"
-          color={COLORS.sky}
-          note="Cada aplicación corre en su propio contenedor. Fácil de reiniciar, actualizar o escalar."
-        >
-          <div className="flex flex-wrap gap-3 justify-center">
-            {[
-              { l: "API Backend", s: "Spring Boot", c: COLORS.sky },
-              { l: "Frontend", s: "Angular", c: COLORS.sky },
-              { l: "RabbitMQ", s: "Mensajería", c: COLORS.amber },
-              { l: "PostgreSQL", s: "Base de datos", c: COLORS.violet },
-            ].map(({ l, s, c }) => (
-              <DiagramNode key={l} color={c} label={l} sublabel={s} icon="📦" />
-            ))}
-          </div>
-        </DiagramSection>
+        <div className="flex flex-wrap justify-center gap-3">
+          <DiagramNode color={COLORS.emerald} label="Auth" sublabel="Email + cookies" icon="🔑" />
+          <DiagramNode color={COLORS.emerald} label="PostgreSQL" sublabel="RLS policies" icon="🗄" />
+          <DiagramNode color={COLORS.emerald} label="Realtime" sublabel="Live updates" icon="⚡" />
+          <DiagramNode color={COLORS.emerald} label="Edge Functions" sublabel="Tarifa calc" icon="⚙️" />
+        </div>
       </DiagramSection>
-      <Arrow vertical label="métricas" />
-      <DiagramSection title="Observabilidad" color={COLORS.emerald}>
-        <div className="flex gap-3 justify-center">
-          <DiagramNode color={COLORS.emerald} label="Prometheus" sublabel="Recolecta métricas" icon="📊" />
-          <DiagramNode color={COLORS.emerald} label="Grafana" sublabel="Visualiza en tiempo real" icon="📈" />
+      <Arrow vertical label="state machine" />
+      <DiagramSection
+        title="Order State Machine"
+        color={COLORS.purple}
+        note="Validated in DB via RPC (transicionar_pedido). Each state change is broadcast in realtime to all panels."
+      >
+        <div className="flex justify-center gap-2 flex-wrap">
+          {["pending", "assigned", "accepted", "picked_up", "in_transit", "delivered"].map((s) => (
+            <DiagramBadge key={s} label={s} color={COLORS.purple} />
+          ))}
+        </div>
+      </DiagramSection>
+      <Arrow vertical label="push notifications" />
+      <DiagramSection title="Notifications" color={COLORS.amber}>
+        <div className="flex justify-center gap-3">
+          <DiagramNode color={COLORS.amber} label="Web Push" sublabel="VAPID" icon="🔔" />
+          <DiagramNode color={COLORS.amber} label="FCM" sublabel="Android" icon="📬" />
+          <DiagramNode color={COLORS.amber} label="APNs" sublabel="iOS" icon="📮" />
         </div>
       </DiagramSection>
     </div>
   )
 }
 
-// ─── DIAGRAM 3: POS Desktop ───────────────────────────────────────────────────
-export function POSPaloCafeArchitecture() {
+// ─── DIAGRAM 3: VentaDeLotes (React + Supabase) ─────────────────────────────
+export function VentaDeLotesArchitecture() {
   return (
     <div className="flex flex-col items-center gap-0 w-full text-foreground">
-      <DiagramSection
-        title="Capa de presentación — Lo que ve el usuario"
-        color={COLORS.accent}
-        note="Interfaz de escritorio con formularios, tablas y botones. El cajero interactúa directamente con esta pantalla."
-      >
+      <DiagramSection title="Presentation — React 19 + TypeScript" color={COLORS.blue}>
         <div className="flex flex-wrap gap-3 justify-center">
-          {["Módulo de Ventas", "Panel de Inventario", "Reportes y Cierre", "Gestión de Productos"].map((l) => (
-            <DiagramNode key={l} color={COLORS.accent} label={l} sublabel="Windows Forms" icon="🖥" />
-          ))}
-        </div>
-      </DiagramSection>
-      <Arrow vertical label="eventos UI" />
-      <DiagramSection
-        title="Lógica de negocio — C# .NET 6"
-        color={COLORS.blue}
-        note="El cerebro del sistema. Calcula precios, aplica descuentos, valida stock y genera reportes. Esta capa solo conoce reglas, no pantallas ni base de datos."
-      >
-        <div className="flex flex-wrap gap-3 justify-center">
-          {["Motor de Ventas", "Control de Stock", "Generador de Reportes", "Validaciones"].map((l) => (
-            <DiagramNode key={l} color={COLORS.blue} label={l} sublabel="Entity Framework" icon="⚙️" />
-          ))}
-        </div>
-      </DiagramSection>
-      <Arrow vertical label="lectura / escritura" />
-      <DiagramSection
-        title="Datos — SQLite (archivo local)"
-        color={COLORS.violet}
-        note="La base de datos es un archivo en el mismo computador. Funciona sin internet, arranca en milisegundos y no necesita un servidor externo."
-      >
-        <div className="flex gap-4 justify-center">
           {[
-            { l: "Productos", s: "Catálogo", i: "🏷" },
-            { l: "Ventas", s: "Historial", i: "🧾" },
-            { l: "Inventario", s: "Stock", i: "📦" },
-            { l: "Clientes", s: "Registro", i: "👥" },
+            { l: "Home", s: "Hero + Carousel", i: "🏠" },
+            { l: "Lots Catalog", s: "Filter + Map", i: "🗺" },
+            { l: "Admin Dashboard", s: "KPIs + CRUD", i: "📊" },
+            { l: "PWA", s: "Offline support", i: "📱" },
           ].map(({ l, s, i }) => (
-            <DiagramNode key={l} color={COLORS.violet} label={l} sublabel={s} icon={i} />
+            <DiagramNode key={l} color={COLORS.blue} label={l} sublabel={s} icon={i} />
           ))}
+        </div>
+      </DiagramSection>
+      <Arrow vertical label="React Router v8" />
+      <DiagramSection
+        title="Forms & Validation"
+        color={COLORS.accent}
+        note="React Hook Form + Zod for type-safe form validation. Cloudinary for image uploads."
+      >
+        <div className="flex justify-center gap-3">
+          <DiagramNode color={COLORS.accent} label="React Hook Form" sublabel="Zod schemas" icon="📝" />
+          <DiagramNode color={COLORS.accent} label="Cloudinary" sublabel="CDN + upload" icon="☁️" />
+        </div>
+      </DiagramSection>
+      <Arrow vertical label="Supabase client" />
+      <DiagramSection
+        title="Supabase — Backend as a Service"
+        color={COLORS.emerald}
+        note="Auth, PostgreSQL, RLS, and RPCs. Admin access verified via has_backstage_access() RPC."
+      >
+        <div className="flex flex-wrap justify-center gap-3">
+          <DiagramNode color={COLORS.emerald} label="Auth" sublabel="JWT + role check" icon="🔑" />
+          <DiagramNode color={COLORS.emerald} label="PostgreSQL" sublabel="lots, leads, views" icon="🗄" />
+          <DiagramNode color={COLORS.emerald} label="RLS" sublabel="Row Level Security" icon="🛡" />
+          <DiagramNode color={COLORS.emerald} label="RPCs" sublabel="is_admin, track_view" icon="⚙️" />
+        </div>
+      </DiagramSection>
+      <Arrow vertical label="CI pipeline" />
+      <DiagramSection title="Quality — GitHub Actions" color={COLORS.violet}>
+        <div className="flex justify-center gap-3">
+          <DiagramNode color={COLORS.violet} label="Vitest" sublabel="257 unit tests" icon="✅" />
+          <DiagramNode color={COLORS.violet} label="Playwright" sublabel="146 e2e tests" icon="🧪" />
+          <DiagramNode color={COLORS.violet} label="React Doctor" sublabel="100/100" icon="🩺" />
         </div>
       </DiagramSection>
     </div>
   )
 }
 
-// ─── DIAGRAM 4: JWT Auth Flow ─────────────────────────────────────────────────
+// ─── DIAGRAM 4: NullBot Security ─────────────────────────────────────────────
+export function NullBotArchitecture() {
+  return (
+    <div className="flex flex-col items-center gap-0 w-full text-foreground">
+      <DiagramSection title="UI — .NET 8 WPF (MVVM)" color={COLORS.blue}>
+        <div className="flex justify-center gap-4">
+          <DiagramNode color={COLORS.blue} label="Dashboard" sublabel="Status overview" icon="🖥" />
+          <DiagramNode color={COLORS.blue} label="Scanner" sublabel="File analysis" icon="🔍" />
+          <DiagramNode color={COLORS.blue} label="Network Monitor" sublabel="C2 detection" icon="📡" />
+          <DiagramNode color={COLORS.blue} label="Quarantine" sublabel="AES-256 encrypted" icon="🔒" />
+        </div>
+      </DiagramSection>
+      <Arrow vertical label="stdout stream" />
+      <DiagramSection
+        title="Detection Engine — C++20"
+        color={COLORS.accent}
+        note="High-performance scanning engine built with CMake + Ninja. Communicates with the UI via stdout streaming."
+      >
+        <div className="flex flex-wrap justify-center gap-3">
+          <DiagramNode color={COLORS.accent} label="File Scanner" sublabel="YARA + PE analysis" icon="⚙️" />
+          <DiagramNode color={COLORS.accent} label="C2 Detector" sublabel="Beaconing + DGA" icon="🤖" />
+          <DiagramNode color={COLORS.accent} label="Entropy Analysis" sublabel="Shannon scoring" icon="📊" />
+        </div>
+      </DiagramSection>
+      <Arrow vertical label="reads" />
+      <DiagramSection title="Signature Database — SQLite" color={COLORS.violet}>
+        <div className="flex justify-center gap-3">
+          <DiagramNode color={COLORS.violet} label="Hash DB" sublabel="SHA-256 lookups" icon="🗄" />
+          <DiagramNode color={COLORS.violet} label="Domain BL" sublabel="URLhaus + OTX" icon="🌐" />
+          <DiagramNode color={COLORS.violet} label="IP Reputation" sublabel="Feodo Tracker" icon="🛡" />
+        </div>
+      </DiagramSection>
+      <Arrow vertical label="auto-update" />
+      <DiagramSection title="Feed Updater — Python" color={COLORS.amber}>
+        <div className="flex justify-center gap-3">
+          <DiagramNode color={COLORS.amber} label="Abuse.ch" sublabel="URLhaus" icon="📥" />
+          <DiagramNode color={COLORS.amber} label="OTX" sublabel="AlienVault" icon="📡" />
+          <DiagramNode color={COLORS.amber} label="EmergingThreats" sublabel="Free feeds" icon="🔄" />
+        </div>
+      </DiagramSection>
+    </div>
+  )
+}
+
+// ─── DIAGRAM 5: JWT Auth Flow ─────────────────────────────────────────────────
 interface JWTStep {
   n: string
   color: DiagramColor
@@ -299,17 +354,17 @@ interface JWTStep {
 }
 
 const JWT_STEPS: JWTStep[] = [
-  { n: "1", color: COLORS.blue, icon: "👤", label: "Usuario", sub: "Envía usuario + contraseña" },
-  { n: "2", color: COLORS.accent, icon: "🔑", label: "Spring Security", sub: "Verifica credenciales en BD" },
-  { n: "3", color: COLORS.amber, icon: "🎫", label: "Token JWT", sub: "Genera un pase digital firmado" },
-  { n: "4", color: COLORS.purple, icon: "🛡", label: "JwtFilter", sub: "Valida el pase en cada petición" },
-  { n: "5", color: COLORS.emerald, icon: "✅", label: "Recurso Protegido", sub: "Acceso concedido según rol" },
+  { n: "1", color: COLORS.blue, icon: "👤", label: "User", sub: "Sends credentials" },
+  { n: "2", color: COLORS.accent, icon: "🔑", label: "Spring Security", sub: "Verifies in DB" },
+  { n: "3", color: COLORS.amber, icon: "🎫", label: "JWT Token", sub: "Signed digital pass" },
+  { n: "4", color: COLORS.purple, icon: "🛡", label: "JwtFilter", sub: "Validates each request" },
+  { n: "5", color: COLORS.emerald, icon: "✅", label: "Protected Resource", sub: "Access by role" },
 ]
 
 const JWT_ROLES = [
-  { l: "Admin", desc: "Acceso total", c: COLORS.amber },
-  { l: "Usuario", desc: "Acceso limitado", c: COLORS.purple },
-  { l: "Invitado", desc: "Solo lectura", c: COLORS.emerald },
+  { l: "Admin", desc: "Full access", c: COLORS.amber },
+  { l: "User", desc: "Limited access", c: COLORS.purple },
+  { l: "Guest", desc: "Read only", c: COLORS.emerald },
 ] as const
 
 export function JWTFlowArchitecture() {
@@ -352,9 +407,9 @@ export function JWTFlowArchitecture() {
       </div>
       <div className="mt-5">
         <DiagramSection
-          title="El token JWT es como un pase de concierto"
+          title="JWT Token — like a concert wristband"
           color={COLORS.amber}
-          note="Una vez que inicias sesión, recibes un token firmado digitalmente. En cada petición siguiente presentas ese token — el servidor verifica que sea auténtico (sin consultar la BD) y te da acceso según tu rol. Expira en tiempo configurable y puede revocarse."
+          note="Once you log in, you receive a signed token. On each subsequent request, you present that token — the server verifies it (without hitting the DB) and grants access based on your role. Configurable expiry, revocable."
         >
           <div className="flex gap-5 justify-center flex-wrap">
             {JWT_ROLES.map(({ l, desc, c }) => (
@@ -367,16 +422,16 @@ export function JWTFlowArchitecture() {
   )
 }
 
-// ─── DIAGRAM 4: React + Supabase (Football Predictor) ────────────────────────
+// ─── DIAGRAM 6: Football Predictor (React + Supabase) ────────────────────────
 export function ReactSupabaseArchitecture() {
   return (
     <div className="flex flex-col items-center gap-0 w-full text-foreground">
-      <DiagramSection title="Capa de presentación — React 18 + TypeScript" color={COLORS.blue}>
+      <DiagramSection title="Presentation — React 18 + TypeScript" color={COLORS.blue}>
         <div className="flex flex-wrap gap-3 justify-center">
           {[
-            { l: "Dashboard", s: "Predicciones", i: "📊" },
-            { l: "Gráficos", s: "Plotly.js", i: "📈" },
-            { l: "Auth UI", s: "Login / Registro", i: "🔐" },
+            { l: "Dashboard", s: "Predictions", i: "📊" },
+            { l: "Charts", s: "Plotly.js", i: "📈" },
+            { l: "Auth UI", s: "Login / Register", i: "🔐" },
           ].map(({ l, s, i }) => (
             <DiagramNode key={l} color={COLORS.blue} label={l} sublabel={s} icon={i} />
           ))}
@@ -384,15 +439,16 @@ export function ReactSupabaseArchitecture() {
       </DiagramSection>
       <Arrow vertical label="TypeScript" />
       <DiagramSection
-        title="Algoritmos — ejecución en cliente"
+        title="Algorithms — client-side execution"
         color={COLORS.accent}
-        note="Los modelos corren directamente en el navegador. Sin latencia de red para los cálculos estadísticos."
+        note="Models run directly in the browser. Zero network latency for statistical calculations."
       >
         <div className="flex flex-wrap gap-3 justify-center">
           {[
-            { l: "Elo Rating", s: "Fuerza relativa", i: "⚡" },
-            { l: "Poisson", s: "Goles esperados", i: "🎯" },
-            { l: "Monte Carlo", s: "Simulaciones", i: "🎲" },
+            { l: "Elo Rating", s: "Relative strength", i: "⚡" },
+            { l: "Poisson", s: "Expected goals", i: "🎯" },
+            { l: "Monte Carlo", s: "10K simulations", i: "🎲" },
+            { l: "xG Model", s: "Expected goals", i: "⚽" },
           ].map(({ l, s, i }) => (
             <DiagramNode key={l} color={COLORS.accent} label={l} sublabel={s} icon={i} />
           ))}
@@ -402,12 +458,12 @@ export function ReactSupabaseArchitecture() {
       <DiagramSection
         title="Supabase — Backend as a Service"
         color={COLORS.emerald}
-        note="Supabase provee base de datos PostgreSQL, autenticación con tokens JWT y políticas de seguridad a nivel de fila (RLS), sin necesidad de un servidor propio."
+        note="PostgreSQL, JWT auth, and Row Level Security — no custom backend needed."
       >
         <div className="flex gap-4 justify-center">
           {[
             { l: "Auth", s: "JWT tokens", i: "🔑", c: COLORS.amber },
-            { l: "PostgreSQL", s: "equipos · partidos", i: "🗄", c: COLORS.violet },
+            { l: "PostgreSQL", s: "teams · matches", i: "🗄", c: COLORS.violet },
             { l: "RLS", s: "Row Level Security", i: "🛡", c: COLORS.emerald },
           ].map(({ l, s, i, c }) => (
             <DiagramNode key={l} color={c} label={l} sublabel={s} icon={i} />
@@ -421,7 +477,7 @@ export function ReactSupabaseArchitecture() {
 export function ArchFallback() {
   return (
     <div className="flex items-center justify-center h-full text-sm text-muted-foreground">
-      Diagrama no disponible
+      Diagram not available
     </div>
   )
 }

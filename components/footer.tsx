@@ -5,7 +5,7 @@ export function Footer() {
         Juan Camilo Rojas Ospina © {new Date().getFullYear()}
       </span>
       <span className="text-[11px] text-muted-foreground font-mono">
-        Desarrollador Fullstack
+        Product Engineer · Full-Stack Developer
       </span>
     </footer>
   )

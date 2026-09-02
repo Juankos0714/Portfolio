@@ -1,4 +1,4 @@
-export type ArchitectureType = "microservices" | "devops" | "desktop" | "supabase"
+export type ArchitectureType = "microservices" | "devops" | "desktop" | "supabase" | "security" | "realtime"
 
 export interface ProjectKPI {
   label: string
@@ -24,65 +24,83 @@ export const PROJECTS: Project[] = [
     number: "01",
     id: "ubik",
     title: "Ubik",
-    category: "Fullstack · Plataforma Web",
+    category: "Product Engineering · Reactive Microservices",
     year: "2024–2025",
-    description: "Plataforma de reservas para moteles. SPA en Angular con backend Express/Node.js, pagos con Stripe y mapas interactivos con Leaflet.",
-    longDescription: "Ubik es una plataforma completa para gestión y reserva de habitaciones. El frontend es una SPA en Angular 17+ con Tailwind CSS y Angular Material. El backend en Express/Node.js expone una API REST que gestiona usuarios, reservas y pagos. Los cobros se procesan de forma segura con Stripe y la ubicación de establecimientos se muestra con Leaflet. Desplegado en Vercel con arquitectura hexagonal simplificada separando roles de cliente y propietario.",
-    technologies: ["Angular 17+", "TypeScript", "Express", "Node.js", "Stripe", "Leaflet", "Tailwind CSS", "Vercel"],
+    description: "Distributed hotel & motel booking platform with reactive microservices, real-time dashboards and production-grade observability.",
+    longDescription: "A full-booking platform evolved from a university project to production. The frontend is an Angular 17+ SPA with Tailwind CSS, Leaflet maps and RxJS. The backend is a reactive microservices architecture: 7 independent Spring Boot WebFlux services with Project Reactor and R2DBC, communicating through Kafka and RabbitMQ. Deployed on Azure VM with Docker Compose, Nginx reverse proxy with SSL, and systemd for auto-restart. Includes CQRS + Event Sourcing, Saga Pattern for distributed transactions, Prometheus/Grafana monitoring, and an AI assistant powered by Ollama/Llama 3. Production work included timezone fixes (Colombia/Bogota), soft delete, password reset flow, real-time dashboard via SSE, role-based routing, and Angular bundle optimization.",
+    technologies: ["Spring Boot WebFlux", "Angular 17+", "Kafka", "RabbitMQ", "PostgreSQL", "Redis", "Docker", "Azure VM", "Nginx", "Prometheus", "Grafana"],
     kpis: [
-      { label: "Frontend", value: "Angular" },
-      { label: "Pagos", value: "Stripe" },
-      { label: "Deploy", value: "Vercel" },
+      { label: "Services", value: "7 microservices" },
+      { label: "Messaging", value: "Kafka + RabbitMQ" },
+      { label: "Deploy", value: "Azure + Docker" },
     ],
     github: "https://github.com/Juankos0714/Ubik-App",
     architectureType: "microservices",
   },
   {
     number: "02",
-    id: "ubik-ms",
-    title: "Ubik Backend",
-    category: "Backend · DevOps",
+    id: "stargo",
+    title: "StarGo",
+    category: "Product Engineering · Real-Time Delivery Platform",
     year: "2025",
-    description: "Infraestructura backend reactiva con microservicios Spring Boot WebFlux, patrón Saga y despliegue en Azure con Docker Compose y Nginx SSL.",
-    longDescription: "Capa de infraestructura de Ubik. Implementa el patrón Saga para garantizar atomicidad en la transacción reserva+pago: si el pago falla, la reserva se revierte automáticamente. Cada servicio corre en su propio contenedor Docker y se comunica a través de RabbitMQ. Desplegado en Azure con Nginx como reverse proxy y certificados SSL gestionados. Métricas en tiempo real con Prometheus y Grafana.",
-    technologies: ["Java", "Spring Boot WebFlux", "RabbitMQ", "Docker", "Prometheus", "Grafana", "Nginx", "Azure VM"],
+    description: "End-to-end delivery platform with real-time order tracking, role-based workflows, dynamic/historical pricing engine, automated testing and production monitoring.",
+    longDescription: "A complete delivery platform for Armenia with differentiated roles (client, admin, delivery driver). Built with SvelteKit 5 (runes) and Supabase (Auth, PostgreSQL/RLS, Realtime). Features a zone-based pricing matrix derived from real messenger tariffs, configurable surcharges, and historical commission freezing via RPC. Real-time order state updates across all three dashboards without page reload. Packaged as native mobile apps via Capacitor (Android APK + iOS TestFlight). Testing stack: Vitest (90%+ coverage), Playwright, RLS test suites, k6 performance tests, Lighthouse audits. Monitoring: Sentry, CI-integrated security audit.",
+    technologies: ["SvelteKit 5", "Supabase", "PostgreSQL", "Capacitor", "Vitest", "Playwright", "k6", "Sentry", "PWA"],
     kpis: [
-      { label: "Mensajería", value: "RabbitMQ" },
-      { label: "Escalabilidad", value: "Horizontal" },
-      { label: "Monitoreo", value: "Grafana" },
+      { label: "Roles", value: "3 (client/admin/driver)" },
+      { label: "Testing", value: "Vitest + Playwright + k6" },
+      { label: "Mobile", value: "Capacitor (APK + iOS)" },
     ],
-    github: "https://github.com/Juankos0714/Ubik-Microservices",
-    architectureType: "devops",
+    github: "https://github.com/Juankos0714/Stargo",
+    architectureType: "realtime",
   },
   {
     number: "03",
-    id: "palo-cafe",
-    title: "Palo de Café POS",
-    category: "Desktop · Fullstack",
-    year: "2024",
-    description: "Sistema de punto de venta e inventario para cliente real en Armenia. C# .NET 6 con SQLite para operación 100% offline.",
-    longDescription: "Sistema completo de caja y gestión para una cafetería en Armenia, Colombia. Funciona sin conexión a internet con base de datos local SQLite, incluyendo módulos de ventas, inventario, reportes y cierre de caja. Entregado en producción a un cliente real con capacitación y soporte técnico incluidos.",
-    technologies: ["C#", ".NET 6", "Windows Forms", "SQLite", "Entity Framework"],
+    id: "ventadelotes",
+    title: "VentaDeLotes",
+    category: "Professional Work · Ingesoc S.A.S.",
+    year: "2025",
+    description: "Real-estate lot commercialization platform for La Holanda (Quimbaya, Quindio). React 19 + Supabase with interactive maps, admin dashboard and 257+ unit tests.",
+    longDescription: "Portal digital de inversion y vitrina inmobiliaria for a rural development project. Built with React 19, TypeScript, Vite 8, Tailwind CSS v4 and Supabase (Auth, PostgreSQL, RLS, RPC). Features interactive Leaflet maps, a full admin dashboard with KPIs (lot inventory, lead tracking, 14-day visit analytics), Cloudinary media management, PWA support, and role-based access via RPC (is_admin, has_backstage_access). CI pipeline (GitHub Actions) runs 257 unit tests (Vitest), 146 e2e tests (Playwright), React Doctor 100/100, and security audit on every push. Developed professionally for Ingesoc S.A.S.",
+    technologies: ["React 19", "TypeScript", "Vite 8", "Tailwind CSS v4", "Supabase", "Leaflet", "Playwright", "Cloudinary", "PWA"],
     kpis: [
-      { label: "Estado", value: "Producción" },
-      { label: "Cliente", value: "Real" },
-      { label: "Offline", value: "100%" },
+      { label: "Tests", value: "257 unit + 146 e2e" },
+      { label: "React Doctor", value: "100/100" },
+      { label: "Client", value: "Ingesoc S.A.S." },
     ],
-    architectureType: "desktop",
+    github: "https://github.com/Ingesoc/VentaDeLotes",
+    architectureType: "supabase",
   },
   {
     number: "04",
+    id: "nullbot",
+    title: "NullBot",
+    category: "Open Source · Defensive Security",
+    year: "2025",
+    description: "Open-source botnet detection tool for Windows. C++20 detection engine, .NET 8 WPF UI, YARA rules, DGA/C2 detection and encrypted quarantine.",
+    longDescription: "An open-source defensive security tool that detects and blocks botnet activity on Windows. The detection engine is written in C++20 (CMake + Ninja) with YARA rules, PE analysis, Shannon entropy scoring, DGA domain detection, C2 beaconing analysis, DNS blacklists and IP reputation checks. The UI is a .NET 8 WPF application following MVVM. Features encrypted quarantine (Windows CNG, AES-256-GCM, SHA-256), an auto-updater (Python), and a WiX MSI installer. Testing: 51 tests across CTest and pytest. Licensed under GPL-3.0.",
+    technologies: ["C++20", ".NET 8", "WPF", "SQLite", "YARA", "CMake", "Python", "WiX"],
+    kpis: [
+      { label: "Engine", value: "C++20" },
+      { label: "Detection", value: "YARA + DGA + C2" },
+      { label: "Tests", value: "51 (CTest + pytest)" },
+    ],
+    github: "https://github.com/Juankos0714/NullBot",
+    architectureType: "security",
+  },
+  {
+    number: "05",
     id: "football-predictor",
     title: "Football Predictor",
-    category: "Frontend · Data Science",
+    category: "Data Science · Mathematical Modeling",
     year: "2025",
-    description: "Aplicación de predicción de resultados de fútbol europeo mediante modelos matemáticos Elo, Poisson y simulaciones Monte Carlo implementados en TypeScript.",
-    longDescription: "Herramienta de análisis estadístico construida con React 18 y TypeScript. Implementa tres modelos de predicción: ratings Elo para medir la fuerza relativa de equipos, distribución de Poisson para calcular goles esperados y simulaciones Monte Carlo para estimar probabilidades de resultado. Los datos y la autenticación corren sobre Supabase (PostgreSQL + Auth con JWT), y los resultados se visualizan con Plotly.js.",
-    technologies: ["React 18", "TypeScript", "Vite", "Supabase", "PostgreSQL", "Plotly.js", "Tailwind CSS"],
+    description: "Football match prediction engine using Elo ratings, Poisson distribution, Monte Carlo simulations and interactive Plotly visualizations.",
+    longDescription: "A mathematical analysis engine for predicting European football match outcomes. Implements four prediction models: Elo rating system with home advantage factors, bivariate Poisson PMFs for exact score predictions, Monte Carlo simulations (10,000 iterations) for probability convergence, and expected goals (xG) based on shots and possession metrics. Built with React 18, TypeScript, Vite, Tailwind CSS and Plotly.js for interactive visualizations (probability charts, score distribution heatmaps, simulation histograms). Backend data and authentication via Supabase (PostgreSQL + RLS). Brier Score target < 0.2 for calibrated predictions.",
+    technologies: ["React 18", "TypeScript", "Vite", "Supabase", "PostgreSQL", "Plotly.js", "Tailwind CSS", "Vitest"],
     kpis: [
-      { label: "Modelos", value: "3" },
-      { label: "Algoritmos", value: "Elo · Poisson" },
-      { label: "Backend", value: "Supabase" },
+      { label: "Models", value: "4 (Elo/Poisson/MC/xG)" },
+      { label: "Simulations", value: "10,000 iterations" },
+      { label: "Leagues", value: "5 European" },
     ],
     github: "https://github.com/Juankos0714/ejercicioMachineLearning",
     architectureType: "supabase",
@@ -90,9 +108,12 @@ export const PROJECTS: Project[] = [
 ]
 
 export const SKILLS: Record<string, string[]> = {
-  "Frontend": ["Angular 17+", "React 18", "TypeScript", "Tailwind CSS", "RxJS"],
-  "Backend": ["Java", "Spring Boot WebFlux", "Express", "Node.js", "C#", "PostgreSQL"],
-  "DevOps & Cloud": ["Docker", "Azure", "Nginx", "Supabase", "GitHub Actions", "Vercel"],
+  "Frontend": ["Angular 17+", "React 19", "Next.js", "SvelteKit 5", "Flutter", "TypeScript", "Tailwind CSS"],
+  "Backend": ["Java", "Spring Boot WebFlux", "FastAPI", "Node.js", "Express", "C#", ".NET 8"],
+  "Data & AI": ["PostgreSQL", "Redis", "Supabase", "Firebase", "PyTorch", "Ollama"],
+  "DevOps & Cloud": ["Docker", "Azure", "Nginx", "GitHub Actions", "Vercel", "Prometheus", "Grafana"],
+  "Testing": ["Vitest", "Playwright", "pytest", "CTest", "k6", "Lighthouse"],
+  "Security": ["YARA", "JWT", "RLS", "AES-256", "C2 Detection"],
 }
 
 export const SKILL_ENTRIES = Object.entries(SKILLS)
@@ -105,26 +126,5 @@ export interface ExperienceItem {
   description: string
 }
 
-export const EXPERIENCE: ExperienceItem[] = [
-  {
-    id: "ubik",
-    period: "2024 — Presente",
-    role: "Desarrollador Fullstack",
-    company: "Proyecto Ubik (Portfolio)",
-    description: "Plataforma web fullstack para gestión de reservas: SPA Angular 17+, backend Express/Node.js, pagos con Stripe y despliegue en Vercel. Backend de microservicios con Spring Boot WebFlux y Docker en Azure.",
-  },
-  {
-    id: "palo-cafe",
-    period: "2024",
-    role: "Desarrollador de Software",
-    company: "Cliente Palo de Café — Armenia",
-    description: "Sistema POS e inventario con C# .NET 6 y SQLite. Entrega completa a cliente real con módulos de ventas, productos, reportes y capacitación presencial.",
-  },
-  {
-    id: "sena",
-    period: "2024 — 2026",
-    role: "Tecnólogo en ADSI",
-    company: "SENA",
-    description: "Análisis y Desarrollo de Software. Formación práctica en Java, Angular, React, Spring Boot, Docker y despliegue en nube.",
-  },
-]
+// Legacy data kept for backward compatibility — new Experience component uses constants.ts
+export const EXPERIENCE: ExperienceItem[] = []
