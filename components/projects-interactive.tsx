@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import { PROJECTS } from "@/lib/data/portfolio"
 import type { Project, ArchitectureType } from "@/lib/data/portfolio"
@@ -31,24 +31,35 @@ const ETIQUETAS_DIAGRAMA: Record<ArchitectureType, string> = {
   desktop: "Desktop Architecture",
 }
 
-// --- ComponenteArquitectura (SRP) ---
 function ComponenteArquitectura({ tipo }: { tipo: ArchitectureType }) {
   const Componente = ARQUITECTURA_MAP[tipo]
-  // Fix: guarda de nulidad — protege contra tipos nuevos sin entrada en el mapa
   return Componente ? <Componente /> : null
 }
 
-// --- FilaProyecto (SRP) ---
 function FilaProyecto({ proyecto }: { proyecto: Project }) {
   const [abierto, setAbierto] = useState(false)
 
+  const toggle = useCallback(() => setAbierto((a) => !a), [])
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault()
+        toggle()
+      }
+    },
+    [toggle],
+  )
+
   return (
     <article className="border-t border-border">
-      {/* Cabecera — siempre visible */}
-      {/* Fix: grid responsive — 3 columnas en mobile (descripción oculta), 4 en desktop */}
       <div
-        onClick={() => setAbierto((a) => !a)}
-        className="grid grid-cols-[48px_1fr_80px] md:grid-cols-[48px_1fr_auto_80px] gap-6 items-center py-7 cursor-pointer hover:opacity-80 transition-opacity duration-200"
+        onClick={toggle}
+        onKeyDown={handleKeyDown}
+        role="button"
+        tabIndex={0}
+        aria-expanded={abierto}
+        className="grid grid-cols-[48px_1fr_80px] md:grid-cols-[48px_1fr_auto_80px] gap-6 items-center py-7 cursor-pointer hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent transition-opacity duration-200"
       >
         <span className="text-[11px] text-muted-foreground font-mono">{proyecto.number}</span>
 
@@ -79,6 +90,7 @@ function FilaProyecto({ proyecto }: { proyecto: Project }) {
               borderColor: abierto ? "var(--accent)" : "var(--border)",
               color: abierto ? "var(--accent)" : "var(--muted-foreground)",
             }}
+            aria-hidden="true"
           >
             <span
               className="text-lg leading-none block"
@@ -93,7 +105,6 @@ function FilaProyecto({ proyecto }: { proyecto: Project }) {
         </div>
       </div>
 
-      {/* Caso de estudio expandido */}
       <AnimatePresence initial={false}>
         {abierto && (
           <motion.div
@@ -103,15 +114,15 @@ function FilaProyecto({ proyecto }: { proyecto: Project }) {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.5, ease: EASE }}
             style={{ overflow: "hidden" }}
+            role="region"
+            aria-label={`Details for ${proyecto.title}`}
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pb-12 pt-10 border-t border-border">
-              {/* Izquierda — descripción, KPIs, tecnologías, enlace */}
               <div>
                 <p className="text-[15px] leading-[1.8] text-muted-foreground mb-9 max-w-[480px]">
                   {proyecto.longDescription}
                 </p>
 
-                {/* KPIs */}
                 <div className="flex gap-6 mb-9 pb-9 border-b border-border">
                   {proyecto.kpis.map((k) => (
                     <div key={k.label}>
@@ -125,7 +136,6 @@ function FilaProyecto({ proyecto }: { proyecto: Project }) {
                   ))}
                 </div>
 
-                {/* Tecnologías */}
                 <div className="mb-7">
                   <span className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground font-mono block mb-3">
                     Technologies
@@ -134,7 +144,7 @@ function FilaProyecto({ proyecto }: { proyecto: Project }) {
                     {proyecto.technologies.map((t) => (
                       <span
                         key={t}
-                        className="text-[11px] px-2.5 py-1 border border-border font-mono text-muted-foreground tracking-[0.04em] hover:border-accent hover:text-accent transition-all duration-200 cursor-default"
+                        className="text-[11px] px-2.5 py-1 border border-border font-mono text-muted-foreground tracking-[0.04em] hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent transition-all duration-200 cursor-default"
                       >
                         {t}
                       </span>
@@ -143,29 +153,18 @@ function FilaProyecto({ proyecto }: { proyecto: Project }) {
                 </div>
 
                 {proyecto.github && (
-                  <motion.a
+                  <a
                     href={proyecto.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2.5 text-[12px] tracking-[0.05em] px-5 py-2.5 border border-border text-foreground hover:border-accent hover:text-accent transition-all duration-300"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    className="inline-flex items-center gap-2.5 text-[12px] tracking-[0.05em] px-5 py-2.5 border border-border text-foreground hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent transition-all duration-300"
                   >
                     View on GitHub
-                    <motion.svg
-                      className="w-3.5 h-3.5"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      whileHover={{ x: 4 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                    ><path d="M7 17L17 7M17 7H7M17 7v10" /></motion.svg>
-                  </motion.a>
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
+                  </a>
                 )}
               </div>
 
-              {/* Derecha — diagrama de arquitectura */}
               <div>
                 <span className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground font-mono block mb-4">
                   Diagrama — {ETIQUETAS_DIAGRAMA[proyecto.architectureType]}
@@ -184,7 +183,7 @@ function FilaProyecto({ proyecto }: { proyecto: Project }) {
 
 export function ProjectsInteractive() {
   return (
-    <section id="work" className="py-24 max-w-[1200px] mx-auto px-6 md:px-12">
+    <section id="work" className="py-24 max-w-[1200px] mx-auto px-6 md:px-12" aria-labelledby="work-heading">
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -192,29 +191,26 @@ export function ProjectsInteractive() {
         transition={{ duration: 0.8 }}
         className="mb-16"
       >
-        <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono">
+        <span id="work-heading" className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono">
           Featured Projects
         </span>
       </motion.div>
 
       <div>
-        {/* Fix ML-4: key estable usando proyecto.id en lugar de índice */}
         {PROJECTS.map((proyecto) => (
           <FilaProyecto key={proyecto.id} proyecto={proyecto} />
         ))}
 
         <div className="border-t border-border pt-8 flex justify-end">
-          <motion.a
+          <a
             href="https://github.com/Juankos0714"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 text-[13px] text-muted-foreground hover:text-accent transition-colors duration-300 tracking-[0.05em]"
-            whileHover={{ x: 4 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            className="inline-flex items-center gap-3 text-[13px] text-muted-foreground hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent transition-colors duration-300 tracking-[0.05em]"
           >
             View all projects on GitHub
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-          </motion.a>
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+          </a>
         </div>
       </div>
     </section>

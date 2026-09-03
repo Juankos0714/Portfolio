@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { motion } from "motion/react"
+import Image from "next/image"
+import { motion, useReducedMotion } from "motion/react"
 import { useTheme } from "next-themes"
 import {
   EASE,
@@ -19,14 +20,13 @@ interface MousePosition {
   y: number
 }
 
-// BCR is cached to avoid layout thrash on each mousemove event.
-// RAF throttle ensures at most one state update per render frame.
-// Coordinates are clamped to [0, 1] to prevent overshooting when the
-// cursor leaves the section boundaries.
 function useCursorParallax(ref: React.RefObject<HTMLElement | null>): MousePosition {
   const [mouse, setMouse] = useState<MousePosition>({ x: 0.5, y: 0.5 })
+  const prefersReducedMotion = useReducedMotion()
 
   useEffect(() => {
+    if (prefersReducedMotion) return
+
     const el = ref.current
     if (!el) return
 
@@ -45,13 +45,13 @@ function useCursorParallax(ref: React.RefObject<HTMLElement | null>): MousePosit
       })
     }
 
-    window.addEventListener("mousemove", onMove)
+    window.addEventListener("mousemove", onMove, { passive: true })
     return () => {
       cancelAnimationFrame(rafId)
       window.removeEventListener("mousemove", onMove)
       observer.disconnect()
     }
-  }, [ref])
+  }, [ref, prefersReducedMotion])
 
   return mouse
 }
@@ -67,6 +67,7 @@ function CursorGlow({ mouse }: { mouse: MousePosition }) {
         transform: "translate(-50%, -50%)",
         transition: `left 0.8s ${EASE_CSS}, top 0.8s ${EASE_CSS}`,
       }}
+      aria-hidden="true"
     />
   )
 }
@@ -77,8 +78,6 @@ interface HeroNavProps {
   onToggleTheme: () => void
 }
 
-// Stagger container variants — coordinates the sequential reveal of hero elements.
-// Each child animates in order with a brief gap between them.
 const heroStagger = {
   hidden: {},
   visible: {
@@ -86,7 +85,6 @@ const heroStagger = {
   },
 }
 
-// Shared child variant — each element fades in and slides up.
 const heroChild = {
   hidden: { opacity: 0, y: 16 },
   visible: {
@@ -108,12 +106,13 @@ function HeroNav({ mounted, isDark, onToggleTheme }: HeroNavProps) {
       <motion.nav
         variants={heroChild}
         className="flex gap-8 md:gap-10 items-center"
+        aria-label="Main navigation"
       >
         {NAV_LINKS.map(({ href, label }) => (
           <a
             key={href}
             href={href}
-            className="hidden md:block text-[13px] tracking-[0.05em] text-muted-foreground hover:text-accent transition-colors duration-300"
+            className="hidden md:block text-[13px] tracking-[0.05em] text-muted-foreground hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent transition-colors duration-300"
           >
             {label}
           </a>
@@ -122,7 +121,8 @@ function HeroNav({ mounted, isDark, onToggleTheme }: HeroNavProps) {
           <button
             type="button"
             onClick={onToggleTheme}
-            className="border border-border px-3 py-1.5 text-[11px] font-mono tracking-[0.06em] text-muted-foreground hover:border-accent hover:text-accent transition-all duration-300"
+            aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+            className="border border-border px-3 py-1.5 text-[11px] font-mono tracking-[0.06em] text-muted-foreground hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent transition-all duration-300"
           >
             {isDark ? "LIGHT" : "DARK"}
           </button>
@@ -153,11 +153,13 @@ function HeroPhoto({ tx, ty }: { tx: number; ty: number }) {
             className="absolute border border-border"
             style={{ inset: -8, transform: "rotate(2deg)" }}
           />
-          <img
+          <Image
             src={PHOTO_SRC}
-            alt={PERSON.name}
+            alt={`Portrait of ${PERSON.name}`}
             width={280}
             height={340}
+            priority
+            sizes="280px"
             className="block object-cover object-top w-[280px] h-[340px]"
             style={{
               filter: isHovered ? "grayscale(0%)" : "grayscale(20%)",
@@ -165,7 +167,6 @@ function HeroPhoto({ tx, ty }: { tx: number; ty: number }) {
             }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onError={(e) => { e.currentTarget.style.display = "none" }}
           />
           <div className="absolute -bottom-4 left-4 flex items-center gap-2 bg-background border border-border px-4 py-2">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-dot" />
@@ -190,17 +191,18 @@ function HeroSocialLinks() {
       <span className="text-[11px] font-mono tracking-[0.1em] text-muted-foreground">
         {PERSON.location}
       </span>
-      <div className="flex gap-6 md:gap-7">              {SOCIAL_LINKS.map(({ label, href }) => (
+      <div className="flex gap-6 md:gap-7">
+        {SOCIAL_LINKS.map(({ label, href }) => (
           <motion.a
             key={label}
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-[12px] text-muted-foreground hover:text-accent transition-colors duration-300 tracking-[0.06em]"
+            className="flex items-center gap-1.5 text-[12px] text-muted-foreground hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent transition-colors duration-300 tracking-[0.06em]"
             whileHover={{ y: -2 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
+            <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" aria-hidden="true" />
             {label}
           </motion.a>
         ))}
@@ -212,19 +214,22 @@ function HeroSocialLinks() {
 export function Hero() {
   const [mounted, setMounted] = useState(false)
   const ref = useRef<HTMLElement>(null)
-  // resolvedTheme resolves "system" to the actual value — theme === "system"
-  // would never activate isDark correctly.
+  const prefersReducedMotion = useReducedMotion()
   const { resolvedTheme, setTheme } = useTheme()
   const mouse = useCursorParallax(ref)
 
   useEffect(() => { setMounted(true) }, [])
 
-  const tx = (mouse.x - 0.5) * 12
-  const ty = (mouse.y - 0.5) * 8
+  const tx = prefersReducedMotion ? 0 : (mouse.x - 0.5) * 12
+  const ty = prefersReducedMotion ? 0 : (mouse.y - 0.5) * 8
   const isDark = mounted && resolvedTheme === "dark"
 
   return (
-    <section ref={ref} className="relative min-h-screen flex flex-col overflow-hidden bg-background">
+    <section
+      ref={ref}
+      className="relative min-h-screen flex flex-col overflow-hidden bg-background"
+      aria-label="Hero section"
+    >
       <CursorGlow mouse={mouse} />
 
       <div className="relative z-10 flex flex-col flex-1 max-w-[1200px] w-full mx-auto px-6 md:px-12 py-8">
@@ -248,9 +253,6 @@ export function Hero() {
                 {PERSON.role}
               </motion.p>
 
-              {/* The name uses Motion for entrance opacity/translate, but cursor
-                  parallax is kept on inline transform via separate CSS transitions.
-                  Splitting them avoids transform conflicts between the two systems. */}
               <motion.h1
                 className="font-serif font-normal tracking-tight mb-8"
                 style={{ fontSize: "clamp(3.5rem, 9vw, 8rem)", lineHeight: 1.0, letterSpacing: "-0.02em" }}
@@ -301,7 +303,7 @@ export function Hero() {
               <motion.div variants={heroChild}>
                 <motion.a
                   href="#work"
-                  className="inline-flex items-center gap-4 px-7 py-3.5 border border-foreground text-foreground hover:bg-foreground hover:text-background transition-all duration-300 text-sm tracking-[0.04em]"
+                  className="inline-flex items-center gap-4 px-7 py-3.5 border border-foreground text-foreground hover:bg-foreground hover:text-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent transition-all duration-300 text-sm tracking-[0.04em]"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -312,6 +314,7 @@ export function Hero() {
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
+                    aria-hidden="true"
                     whileHover={{ x: 4 }}
                     transition={{ type: "spring", stiffness: 400, damping: 20 }}
                   ><path d="M5 12h14M12 5l7 7-7 7" /></motion.svg>

@@ -21,8 +21,8 @@ function EmailButton() {
     <motion.a
       href={`mailto:${PERSON.email}`}
       onClick={handleClick}
-      aria-label="Copy email address"
-      className="inline-flex items-center gap-5 text-foreground hover:text-accent transition-colors duration-300 group"
+      aria-label={copied ? "Email address copied to clipboard" : "Copy email address"}
+      className="inline-flex items-center gap-5 text-foreground hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent transition-colors duration-300 group"
       style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.6rem)", fontFamily: "var(--font-serif)" }}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
@@ -30,7 +30,7 @@ function EmailButton() {
       <span className="transition-opacity duration-200">
         {copied ? "Copied!" : PERSON.email}
       </span>
-      <span className="w-11 h-11 border border-current flex items-center justify-center flex-shrink-0 transition-all duration-300">
+      <span className="w-11 h-11 border border-current flex items-center justify-center flex-shrink-0 transition-all duration-300" aria-hidden="true">
         {copied ? (
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 6L9 17l-5-5" /></svg>
         ) : (
@@ -43,7 +43,7 @@ function EmailButton() {
 
 export function Contact() {
   return (
-    <section id="contact" className="py-24 px-6 md:px-12">
+    <section id="contact" className="py-24 px-6 md:px-12" aria-labelledby="contact-heading">
       <div className="max-w-[1200px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 items-end">
           <motion.div
@@ -52,14 +52,14 @@ export function Contact() {
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: EASE }}
           >
-            <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono block mb-10">
+            <span id="contact-heading" className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono block mb-10">
               Contact
             </span>
             <h2
               className="font-serif font-normal tracking-tight mb-12"
               style={{ fontSize: "clamp(3rem, 7vw, 6rem)", lineHeight: 0.95, letterSpacing: "-0.02em" }}
             >
-              Let's build<br />
+              Let&apos;s build<br />
               <em className="not-italic italic text-accent">something</em>
             </h2>
             <p className="text-[15px] text-muted-foreground max-w-[480px] leading-[1.8] mb-12">
@@ -88,20 +88,20 @@ export function Contact() {
               <span className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground font-mono block mb-2.5">
                 Links
               </span>
-              <div className="flex flex-col gap-2">
+              <nav className="flex flex-col gap-2" aria-label="Social links">
                 {CONTACT_SOCIAL_LINKS.map(({ label, href }) => (
                   <a
                     key={label}
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[13px] text-muted-foreground hover:text-accent transition-colors duration-300 flex items-center gap-1"
+                    className="text-[13px] text-muted-foreground hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent transition-colors duration-300 flex items-center gap-1"
                   >
                     {label}
-                    <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
+                    <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
                   </a>
                 ))}
-              </div>
+              </nav>
             </div>
           </motion.div>
         </div>

@@ -74,16 +74,12 @@ function StackBlockCard({ block, index }: { block: StackBlock; index: number }) 
       viewport={{ once: true }}
       transition={{ duration: 0.7, delay: index * 0.08, ease: EASE }}
       whileHover={{ y: -2, transition: { duration: 0.2 } }}
-      className="border border-border p-6 hover:border-accent transition-colors duration-300 group"
+      className="border border-border p-6 hover:border-accent focus-within:border-accent transition-colors duration-300 group"
     >
-      <motion.div
-        className="flex items-center gap-3 mb-4"
-        whileHover={{ x: 2 }}
-        transition={{ type: "spring", stiffness: 400, damping: 25 }}
-      >
-        <Icon className="w-5 h-5" style={{ color: block.color }} strokeWidth={1.5} />
+      <div className="flex items-center gap-3 mb-4">
+        <Icon className="w-5 h-5" style={{ color: block.color }} strokeWidth={1.5} aria-hidden="true" />
         <h3 className="text-[15px] font-medium tracking-tight">{block.title}</h3>
-      </motion.div>
+      </div>
       <p className="text-[13px] leading-[1.7] text-muted-foreground mb-5">
         {block.phrase}
       </p>
@@ -103,7 +99,7 @@ function StackBlockCard({ block, index }: { block: StackBlock; index: number }) 
 
 export function EngineeringStack() {
   return (
-    <section id="engineering" className="py-24 px-6 md:px-12" style={{ background: "var(--section-bg)" }}>
+    <section id="engineering" className="py-24 px-6 md:px-12" style={{ background: "var(--section-bg)" }} aria-labelledby="engineering-heading">
       <div className="max-w-[1200px] mx-auto">
         <motion.div
           initial={{ opacity: 0 }}
@@ -112,7 +108,7 @@ export function EngineeringStack() {
           transition={{ duration: 0.8 }}
           className="mb-16"
         >
-          <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono">
+          <span id="engineering-heading" className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono">
             Engineering
           </span>
         </motion.div>

@@ -30,7 +30,6 @@ import {
   Stethoscope,
   Search,
   Radio,
-  ShieldCheck,
   Download,
   RefreshCw,
   Target,
@@ -389,85 +388,7 @@ export function NullBotArchitecture() {
   )
 }
 
-// --- DIAGRAM 5: JWT Auth Flow ---
-interface JWTStep {
-  n: string
-  color: DiagramColor
-  icon: LucideIcon
-  label: string
-  sub: string
-}
-
-const JWT_STEPS: JWTStep[] = [
-  { n: "1", color: COLORS.blue, icon: User, label: "User", sub: "Sends credentials" },
-  { n: "2", color: COLORS.accent, icon: Key, label: "Spring Security", sub: "Verifies in DB" },
-  { n: "3", color: COLORS.amber, icon: Ticket, label: "JWT Token", sub: "Signed digital pass" },
-  { n: "4", color: COLORS.purple, icon: Shield, label: "JwtFilter", sub: "Validates each request" },
-  { n: "5", color: COLORS.emerald, icon: ShieldCheck, label: "Protected Resource", sub: "Access by role" },
-]
-
-const JWT_ROLES = [
-  { l: "Admin", desc: "Full access", c: COLORS.amber, icon: Crown },
-  { l: "User", desc: "Limited access", c: COLORS.purple, icon: User },
-  { l: "Guest", desc: "Read only", c: COLORS.emerald, icon: Globe },
-] as const
-
-export function JWTFlowArchitecture() {
-  return (
-    <div className="flex flex-col gap-0 w-full text-foreground">
-      <div className="flex items-center justify-center flex-wrap gap-1">
-        {JWT_STEPS.map((step, i) => (
-          <div key={step.n} className="flex items-center">
-            <div className="flex flex-col items-center gap-1.5" style={{ minWidth: 100 }}>
-              <div
-                className="w-7 h-7 flex items-center justify-center text-[11px] font-bold font-mono"
-                style={{ border: `2px solid ${step.color}`, background: `${step.color}22`, color: step.color }}
-              >
-                {step.n}
-              </div>
-              <div
-                className="w-14 h-14 flex items-center justify-center"
-                style={{ border: `2px solid ${step.color}`, background: `${step.color}18` }}
-              >
-                <step.icon className="w-6 h-6" style={{ color: step.color }} strokeWidth={1.5} />
-              </div>
-              <span className="text-[11px] font-medium text-center">{step.label}</span>
-              <span className="text-[9px] opacity-55 text-center max-w-[100px] leading-tight">{step.sub}</span>
-            </div>
-            {i < JWT_STEPS.length - 1 && (
-              <div className="relative w-5 h-px bg-border flex-shrink-0 mb-10">
-                <div
-                  className="absolute right-0 top-1/2"
-                  style={{
-                    transform: "translateY(-50%) translateX(3px)",
-                    borderTop: "4px solid transparent",
-                    borderBottom: "4px solid transparent",
-                    borderLeft: "6px solid var(--muted-foreground)",
-                  }}
-                />
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-      <div className="mt-5">
-        <DiagramSection
-          title="JWT Token — like a concert wristband"
-          color={COLORS.amber}
-          note="Once you log in, you receive a signed token. On each subsequent request, you present that token — the server verifies it (without hitting the DB) and grants access based on your role. Configurable expiry, revocable."
-        >
-          <div className="flex gap-5 justify-center flex-wrap">
-            {JWT_ROLES.map(({ l, desc, c, icon }) => (
-              <DiagramNode key={l} color={c} label={l} sublabel={desc} icon={icon} />
-            ))}
-          </div>
-        </DiagramSection>
-      </div>
-    </div>
-  )
-}
-
-// --- DIAGRAM 6: Football Predictor (React + Supabase) ---
+// --- DIAGRAM 5: Football Predictor (React + Supabase) ---
 export function ReactSupabaseArchitecture() {
   return (
     <div className="flex flex-col items-center gap-0 w-full text-foreground">
@@ -519,10 +440,3 @@ export function ReactSupabaseArchitecture() {
   )
 }
 
-export function ArchFallback() {
-  return (
-    <div className="flex items-center justify-center h-full text-sm text-muted-foreground">
-      Diagram not available
-    </div>
-  )
-}

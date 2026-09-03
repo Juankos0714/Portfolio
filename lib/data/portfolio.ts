@@ -117,14 +117,3 @@ export const SKILLS: Record<string, string[]> = {
 }
 
 export const SKILL_ENTRIES = Object.entries(SKILLS)
-
-export interface ExperienceItem {
-  id: string
-  period: string
-  role: string
-  company: string
-  description: string
-}
-
-// Legacy data kept for backward compatibility — new Experience component uses constants.ts
-export const EXPERIENCE: ExperienceItem[] = []

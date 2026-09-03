@@ -20,12 +20,11 @@ const TYPE_COLORS: Record<string, string> = {
 
 function ExperienceCard({ item, index }: { item: ExperienceEntry; index: number }) {
   return (
-    <motion.div
+    <motion.article
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, delay: index * 0.1, ease: EASE }}
-      whileHover={{ x: 4 }}
       className="border-t border-border pt-8 pb-8 transition-colors duration-300"
     >
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
@@ -42,9 +41,9 @@ function ExperienceCard({ item, index }: { item: ExperienceEntry; index: number 
             </span>
           </div>
         </div>
-        <span className="text-[11px] text-muted-foreground font-mono tracking-[0.06em] whitespace-nowrap">
+        <time className="text-[11px] text-muted-foreground font-mono tracking-[0.06em] whitespace-nowrap">
           {item.period}
-        </span>
+        </time>
       </div>
 
       <p className="text-[14px] leading-[1.8] text-muted-foreground mb-5 max-w-[640px]">
@@ -67,27 +66,19 @@ function ExperienceCard({ item, index }: { item: ExperienceEntry; index: number 
           href={item.projectLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-[12px] tracking-[0.05em] text-muted-foreground hover:text-accent transition-colors duration-300"
+          className="inline-flex items-center gap-2 text-[12px] tracking-[0.05em] text-muted-foreground hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent transition-colors duration-300"
         >
           {item.projectLabel || "View project"}
-          <motion.svg
-            className="w-3.5 h-3.5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            whileHover={{ x: 4 }}
-            transition={{ type: "spring", stiffness: 400, damping: 20 }}
-          ><path d="M5 12h14M12 5l7 7-7 7" /></motion.svg>
+          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
         </a>
       )}
-    </motion.div>
+    </motion.article>
   )
 }
 
 export function Experience() {
   return (
-    <section id="experience" className="py-24 px-6 md:px-12">
+    <section id="experience" className="py-24 px-6 md:px-12" aria-labelledby="experience-heading">
       <div className="max-w-[1200px] mx-auto">
         <motion.div
           initial={{ opacity: 0 }}
@@ -96,7 +87,7 @@ export function Experience() {
           transition={{ duration: 0.8 }}
           className="mb-16"
         >
-          <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono">
+          <span id="experience-heading" className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground font-mono">
             Experience
           </span>
         </motion.div>
