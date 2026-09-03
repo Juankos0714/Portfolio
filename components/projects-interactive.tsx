@@ -4,6 +4,7 @@ import { useState, useCallback } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import { PROJECTS } from "@/lib/data/portfolio"
 import type { Project, ArchitectureType } from "@/lib/data/portfolio"
+import { REPO_STATS } from "@/lib/data/repo-stats"
 import { EASE } from "@/lib/constants"
 import {
   UbikArchitecture,
@@ -36,8 +37,22 @@ function ComponenteArquitectura({ tipo }: { tipo: ArchitectureType }) {
   return Componente ? <Componente /> : null
 }
 
+function repoKeyFromUrl(url: string | undefined): string | null {
+  if (!url) return null
+  const match = url.match(/^https:\/\/github\.com\/([^/]+\/[^/]+?)(?:\.git)?\/?$/)
+  return match ? match[1] : null
+}
+
+function formatDate(iso: string): string {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return iso
+  return d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
+}
+
 function FilaProyecto({ proyecto }: { proyecto: Project }) {
   const [abierto, setAbierto] = useState(false)
+  const repoKey = repoKeyFromUrl(proyecto.github)
+  const stats = repoKey ? REPO_STATS[repoKey] : undefined
 
   const toggle = useCallback(() => setAbierto((a) => !a), [])
 
@@ -84,6 +99,11 @@ function FilaProyecto({ proyecto }: { proyecto: Project }) {
 
         <div className="flex flex-col items-end gap-2">
           <span className="text-[12px] text-muted-foreground font-mono">{proyecto.year}</span>
+          {stats && (
+            <span className="text-[11px] text-muted-foreground font-mono" title={`${stats.stars} stars on GitHub`}>
+              ★ {stats.stars}
+            </span>
+          )}
           <div
             className="w-8 h-8 border flex items-center justify-center transition-all duration-300"
             style={{
@@ -162,6 +182,31 @@ function FilaProyecto({ proyecto }: { proyecto: Project }) {
                     View on GitHub
                     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
                   </a>
+                )}
+
+                {stats && (
+                  <div className="mt-5">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-border border border-border max-w-[480px]">
+                      {[
+                        { label: "Stars", value: stats.stars },
+                        { label: "Forks", value: stats.forks },
+                        { label: "Open issues", value: stats.openIssues },
+                        { label: "Commits", value: stats.commits },
+                      ].map((m) => (
+                        <div key={m.label} className="bg-card px-4 py-3">
+                          <div className="font-serif text-[20px] tracking-tight leading-none">
+                            {m.value.toLocaleString("en-US")}
+                          </div>
+                          <div className="text-[10px] text-muted-foreground tracking-[0.1em] uppercase font-mono mt-1.5">
+                            {m.label}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-2 text-[11px] font-mono text-muted-foreground">
+                      {stats.primaryLanguage ?? "N/A"} · Updated {formatDate(stats.pushedAt)}
+                    </div>
+                  </div>
                 )}
               </div>
 
