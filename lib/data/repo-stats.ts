@@ -18,13 +18,13 @@ export const REPO_STATS: Record<string, RepoStats> = {
   "Ingesoc/VentaDeLotes": {
     stars: 0,
     forks: 0,
-    openIssues: 8,
+    openIssues: 0,
     commits: 59,
     primaryLanguage: "TypeScript",
     topics: [],
     description: "Plataforma web para la comercialización de lotes campestres en el Quindío, enfocada en inversión, valorización y calidad de vida.",
     homepage: "https://laholanda.ingesocc.com/",
-    pushedAt: "2026-09-08T17:33:56Z",
+    pushedAt: "2026-09-14T23:35:37Z",
   },
   "Juankos0714/NullBot": {
     stars: 0,
