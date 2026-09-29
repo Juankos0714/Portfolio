@@ -24,7 +24,7 @@ export const REPO_STATS: Record<string, RepoStats> = {
     topics: [],
     description: "Plataforma web para la comercialización de lotes campestres en el Quindío, enfocada en inversión, valorización y calidad de vida.",
     homepage: "https://laholanda.ingesocc.com/",
-    pushedAt: "2026-09-21T14:11:50Z",
+    pushedAt: "2026-09-28T14:11:24Z",
   },
   "Juankos0714/NullBot": {
     stars: 0,
